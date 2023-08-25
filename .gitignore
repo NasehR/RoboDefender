@@ -1,0 +1,12 @@
+#Build Output
+build/
+out/
+*.class
+*.jar
+
+#IDE Specific Files
+.idea/
+
+#Gradle
+.gradle
+/build/
