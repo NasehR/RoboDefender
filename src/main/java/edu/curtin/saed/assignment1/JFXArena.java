@@ -21,8 +21,8 @@ public class JFXArena extends Pane
     
     // The following values are arbitrary, and you may need to modify them according to the 
     // requirements of your application.
-    private int gridWidth = 9;
-    private int gridHeight = 9;
+    private final int gridWidth = 9;
+    private final int gridHeight = 9;
     private double robotX = 1.0;
     private double robotY = 3.0;
 
