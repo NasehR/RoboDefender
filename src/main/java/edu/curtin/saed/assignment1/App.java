@@ -25,7 +25,8 @@ public class App extends Application
         Label label = new Label("Score: 999");
 
         arena.addListener((x, y) ->
-                System.out.println("Arena click at (" + x + "," + y + ")")
+//                System.out.println("Arena click at (" + x + "," + y + ")")
+                logger.appendText("Arena click at (" + x + "," + y + ")\n")
         );
 
         toolbar.getItems().addAll(btn1, btn2, label);
