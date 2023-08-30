@@ -8,7 +8,6 @@ import javafx.scene.image.Image;
 public class Robot
 {
     private static final String IMAGE_FILE = "rg1024-robot-carrying-things-4.png";
-
     private String id;
     private int d;
     private double xPos;
