@@ -16,13 +16,10 @@ import java.util.*;
 public class JFXArena extends Pane
 {
     // Represents an image to draw, retrieved as a project resource.
-    private static final String IMAGE_FILE = "1554047213.png";
-    private Image robot1;
-    
-    // The following values are arbitrary, and you may need to modify them according to the 
+    // The following values are arbitrary, and you may need to modify them according to the
     // requirements of your application.
-    private int gridWidth = 9;
-    private int gridHeight = 9;
+    private final int gridWidth = 9;
+    private final int gridHeight = 9;
     private double robotX = 1.0;
     private double robotY = 3.0;
 
@@ -30,6 +27,9 @@ public class JFXArena extends Pane
     private Canvas canvas; // Used to provide a 'drawing surface'.
 
     private List<ArenaListener> listeners = null;
+
+    private Robot demo;
+
     
     /**
      * Creates a new arena object, loading the robot image and initialising a drawing surface.
@@ -45,35 +45,29 @@ public class JFXArena extends Pane
         // distributable version of your code with './gradlew build'. The approach below is how a 
         // project is supposed to read its own internal resources, and should work both for 
         // './gradlew run' and './gradlew build'.)
-                
-        try(InputStream is = getClass().getClassLoader().getResourceAsStream(IMAGE_FILE))
-        {
-            if(is == null)
-            {
-                throw new AssertionError("Cannot find image file " + IMAGE_FILE);
-            }
-            robot1 = new Image(is);
-        }
-        catch(IOException e)
-        {
-            throw new AssertionError("Cannot load image file " + IMAGE_FILE, e);
-        }
-        
+
+        // FOR DEMO PURPOSES
+        // NEED TO HAVE A GENERATER CLASS
+        demo = new Robot("1");
+        demo.setPosition(0.0, 0.0);
+
+
         canvas = new Canvas();
         canvas.widthProperty().bind(widthProperty());
         canvas.heightProperty().bind(heightProperty());
         getChildren().add(canvas);
     }
-    
-    
+
     /**
      * Moves a robot image to a new grid position. This is highly rudimentary, as you will need
      * many different robots in practice. This method currently just serves as a demonstration.
      */
     public void setRobotPosition(double x, double y)
     {
-        robotX = x;
-        robotY = y;
+        // Have a movement class that animates the movement of the robot.
+        demo.setPosition(x, y);
+//        robotX = x;
+//        robotY = y;
         requestLayout();
     }
     
@@ -148,11 +142,23 @@ public class JFXArena extends Pane
 
         // Invoke helper methods to draw things at the current location.
         // ** You will need to adapt this to the requirements of your application. **
-        drawImage(gfx, robot1, robotX, robotY);
-        drawLabel(gfx, "Robot Name", robotX, robotY);
+
+        drawRobot(gfx);
     }
-    
-    
+
+    private void drawRobot(GraphicsContext gfx)
+    {
+        double robotx = demo.getXPos();
+        double roboty = demo.getYPos();
+        System.out.println("X: " + robotx);
+        System.out.println("Y: " + roboty);
+        System.out.println("Delay:" + demo.getDelay());
+        Image robotImage = demo.getImage();
+        String robotName = demo.getName();
+        drawImage(gfx, robotImage, robotx, roboty, demo);
+        drawLabel(gfx, robotName, robotx, roboty);
+    }
+
     /** 
      * Draw an image in a specific grid location. *Only* call this from within layoutChildren(). 
      *
@@ -161,7 +167,7 @@ public class JFXArena extends Pane
      *     
      * You shouldn't need to modify this method.
      */
-    private void drawImage(GraphicsContext gfx, Image image, double gridX, double gridY)
+    private void drawImage(GraphicsContext gfx, Image image, double gridX, double gridY, Robot robot)
     {
         // Get the pixel coordinates representing the centre of where the image is to be drawn. 
         double x = (gridX + 0.5) * gridSquareSize;
@@ -170,8 +176,8 @@ public class JFXArena extends Pane
         // We also need to know how "big" to make the image. The image file has a natural width 
         // and height, but that's not necessarily the size we want to draw it on the screen. We 
         // do, however, want to preserve its aspect ratio.
-        double fullSizePixelWidth = robot1.getWidth();
-        double fullSizePixelHeight = robot1.getHeight();
+        double fullSizePixelWidth = robot.getImage().getWidth();
+        double fullSizePixelHeight = robot.getImage().getHeight();
         
         double displayedPixelWidth, displayedPixelHeight;
         if(fullSizePixelWidth > fullSizePixelHeight)
@@ -197,8 +203,7 @@ public class JFXArena extends Pane
             displayedPixelWidth,              // Size of displayed image.
             displayedPixelHeight);
     }
-    
-    
+
     /**
      * Displays a string of text underneath a specific grid location. *Only* call this from within 
      * layoutChildren(). 
