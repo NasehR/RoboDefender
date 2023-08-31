@@ -2,7 +2,7 @@ package edu.curtin.saed.assignment1;
 
 import java.util.Random;
 
-public class RobotSpawner implements Runnable {
+public class RobotSpawner {
 
     private final int TOP_LEFT = 0;
     private final int TOP_RIGHT = 1;
@@ -15,8 +15,8 @@ public class RobotSpawner implements Runnable {
         this.arena = arena;
         robotCount = 0;
     }
-    @Override
-    public void run() {
+
+    public void spawnRobots() {
         Random random = new Random();
 
         int corner = random.nextInt(4); // Randomly choose a corner (0 to 3)
@@ -50,8 +50,13 @@ public class RobotSpawner implements Runnable {
 
         try {
             arena.addRobot(newRobot);
+            moveRobot(newRobot);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    private void moveRobot(Robot robot) throws InterruptedException {
+
     }
 }
