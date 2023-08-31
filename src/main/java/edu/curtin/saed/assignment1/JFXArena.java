@@ -26,7 +26,6 @@ public class JFXArena extends Pane
     private double gridSquareSize; // Auto-calculated
     private Canvas canvas; // Used to provide a 'drawing surface'.
     private List<ArenaListener> listeners = null;
-    private Robot demo;
     private ArrayBlockingQueue<Robot> robots;
 
     /**
@@ -44,10 +43,6 @@ public class JFXArena extends Pane
         // project is supposed to read its own internal resources, and should work both for 
         // './gradlew run' and './gradlew build'.)
 
-        // FOR DEMO PURPOSES
-        // NEED TO HAVE A GENERATER CLASS
-//        demo = new Robot("1");
-//        demo.setPosition(0.0, 0.0);
         robots = new ArrayBlockingQueue<>(10);
 
         canvas = new Canvas();
@@ -63,7 +58,6 @@ public class JFXArena extends Pane
     public void setRobotPosition(double x, double y)
     {
         // Have a movement class that animates the movement of the robot.
-//        demo.setPosition(x, y);
 //        robotX = x;
 //        robotY = y;
         requestLayout();

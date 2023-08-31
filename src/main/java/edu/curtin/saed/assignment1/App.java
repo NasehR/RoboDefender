@@ -27,7 +27,6 @@ public class App extends Application
         Button btn2 = new Button("My Button 2");
         Label label = new Label("Score: 999");
 
-        ExecutorService generatingRobots = Executors.newFixedThreadPool(1);
 
         arena.addListener((x, y) ->
 //                System.out.println("Arena click at (" + x + "," + y + ")")
@@ -58,14 +57,16 @@ public class App extends Application
         contentPane.setTop(toolbar);
         contentPane.setCenter(splitPane);
 
+        RobotManager manager = new RobotManager(arena);
         Scene scene = new Scene(contentPane, 800, 800);
         stage.setScene(scene);
         stage.show();
 
-        generatingRobots.submit(new RobotSpawner(arena));
+
+        manager.run();
 
         stage.setOnCloseRequest(event -> {
-            generatingRobots.shutdown();
+            manager.shutdown();
         });
     }
 }
