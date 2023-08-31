@@ -16,7 +16,7 @@ import java.util.*;
 public class JFXArena extends Pane
 {
     // Represents an image to draw, retrieved as a project resource.
-    // The following values are arbitrary, and you may need to modify them according to the
+    // The following values are arbitrary, and you may need to modify them according to the 
     // requirements of your application.
     private final int gridWidth = 9;
     private final int gridHeight = 9;
@@ -30,7 +30,7 @@ public class JFXArena extends Pane
 
     private Robot demo;
 
-    
+
     /**
      * Creates a new arena object, loading the robot image and initialising a drawing surface.
      */
@@ -203,7 +203,7 @@ public class JFXArena extends Pane
             displayedPixelWidth,              // Size of displayed image.
             displayedPixelHeight);
     }
-
+    
     /**
      * Displays a string of text underneath a specific grid location. *Only* call this from within 
      * layoutChildren(). 

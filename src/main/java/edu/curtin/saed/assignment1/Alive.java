@@ -6,9 +6,7 @@ public class Alive extends RobotState {
     }
 
     @Override
-    public void alive() {
-
-    }
+    public void alive() {}
 
     @Override
     public void dead() {
