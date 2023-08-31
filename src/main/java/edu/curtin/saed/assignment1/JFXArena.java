@@ -7,8 +7,9 @@ import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.TextAlignment;
 
-import java.io.*;
 import java.util.*;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.BlockingQueue;
 
 /**
  * A JavaFX GUI element that displays a grid on which you can draw images, text and lines.
@@ -22,14 +23,11 @@ public class JFXArena extends Pane
     private final int gridHeight = 9;
     private double robotX = 1.0;
     private double robotY = 3.0;
-
     private double gridSquareSize; // Auto-calculated
     private Canvas canvas; // Used to provide a 'drawing surface'.
-
     private List<ArenaListener> listeners = null;
-
     private Robot demo;
-
+    private ArrayBlockingQueue<Robot> robots;
 
     /**
      * Creates a new arena object, loading the robot image and initialising a drawing surface.
@@ -48,9 +46,9 @@ public class JFXArena extends Pane
 
         // FOR DEMO PURPOSES
         // NEED TO HAVE A GENERATER CLASS
-        demo = new Robot("1");
-        demo.setPosition(0.0, 0.0);
-
+//        demo = new Robot("1");
+//        demo.setPosition(0.0, 0.0);
+        robots = new ArrayBlockingQueue<>(10);
 
         canvas = new Canvas();
         canvas.widthProperty().bind(widthProperty());
@@ -65,7 +63,7 @@ public class JFXArena extends Pane
     public void setRobotPosition(double x, double y)
     {
         // Have a movement class that animates the movement of the robot.
-        demo.setPosition(x, y);
+//        demo.setPosition(x, y);
 //        robotX = x;
 //        robotY = y;
         requestLayout();
@@ -97,8 +95,7 @@ public class JFXArena extends Pane
         }
         listeners.add(newListener);
     }
-        
-        
+
     /**
      * This method is called in order to redraw the screen, either because the user is manipulating 
      * the window, OR because you've called 'requestLayout()'.
@@ -143,19 +140,23 @@ public class JFXArena extends Pane
         // Invoke helper methods to draw things at the current location.
         // ** You will need to adapt this to the requirements of your application. **
 
-        drawRobot(gfx);
+        for (Robot robot : robots) {
+            drawRobot(gfx, robot);
+            System.out.println(robot.getXPos());
+            System.out.println(robot.getYPos());
+        }
     }
 
-    private void drawRobot(GraphicsContext gfx)
+    private void drawRobot(GraphicsContext gfx, Robot robot)
     {
-        double robotx = demo.getXPos();
-        double roboty = demo.getYPos();
+        double robotx = robot.getXPos();
+        double roboty = robot.getYPos();
         System.out.println("X: " + robotx);
         System.out.println("Y: " + roboty);
-        System.out.println("Delay:" + demo.getDelay());
-        Image robotImage = demo.getImage();
-        String robotName = demo.getName();
-        drawImage(gfx, robotImage, robotx, roboty, demo);
+        System.out.println("Delay:" + robot.getDelay());
+        Image robotImage = robot.getImage();
+        String robotName = robot.getName();
+        drawImage(gfx, robotImage, robotx, roboty, robot);
         drawLabel(gfx, robotName, robotx, roboty);
     }
 
@@ -223,8 +224,7 @@ public class JFXArena extends Pane
      *     
      * You shouldn't need to modify this method.
      */
-    private void drawLine(GraphicsContext gfx, double gridX1, double gridY1, 
-                                               double gridX2, double gridY2)
+    private void drawLine(GraphicsContext gfx, double gridX1, double gridY1, double gridX2, double gridY2)
     {
         gfx.setStroke(Color.RED);
         
@@ -239,5 +239,16 @@ public class JFXArena extends Pane
                        (clippedGridY1 + 0.5) * gridSquareSize, 
                        (gridX2 + 0.5) * gridSquareSize, 
                        (gridY2 + 0.5) * gridSquareSize);
+    }
+
+    public void addRobot(Robot robot) throws InterruptedException {
+        robots.put(robot);
+        layoutChildren(); // Redraw the arena to show the new robot
+    }
+
+    public Robot removeRobot() throws InterruptedException {
+        Robot robot = robots.take();
+        layoutChildren(); // Redraw the arena to remove the robot
+        return robot;
     }
 }

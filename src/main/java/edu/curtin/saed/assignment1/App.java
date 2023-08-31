@@ -6,6 +6,9 @@ import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 public class App extends Application
 {
     public static void main(String[] args)
@@ -24,6 +27,8 @@ public class App extends Application
         Button btn2 = new Button("My Button 2");
         Label label = new Label("Score: 999");
 
+//        ExecutorService generatingRobots = Executors.newFixedThreadPool(1);
+
         arena.addListener((x, y) ->
 //                System.out.println("Arena click at (" + x + "," + y + ")")
                 logger.appendText("Arena click at (" + x + "," + y + ")\n")
@@ -36,7 +41,6 @@ public class App extends Application
             System.out.println("Button 1 pressed");
             logger.appendText("Button 1 pressed\n");
         });
-
 
         btn2.setOnAction((event) ->
         {
@@ -57,5 +61,11 @@ public class App extends Application
         Scene scene = new Scene(contentPane, 800, 800);
         stage.setScene(scene);
         stage.show();
+
+//        generatingRobots.submit(new RobotSpawner(arena));
+//
+//        stage.setOnCloseRequest(event -> {
+//            generatingRobots.shutdown();
+//        });
     }
 }

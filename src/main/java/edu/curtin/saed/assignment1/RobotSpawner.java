@@ -47,6 +47,7 @@ public class RobotSpawner implements Runnable {
 
         Robot newRobot = new Robot(Integer.toString(++robotCount));
         newRobot.setPosition(xPos, yPos);
+
         try {
             arena.addRobot(newRobot);
         } catch (InterruptedException e) {
