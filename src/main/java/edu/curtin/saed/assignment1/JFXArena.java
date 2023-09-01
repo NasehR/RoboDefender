@@ -136,8 +136,8 @@ public class JFXArena extends Pane
 
         for (Robot robot : robots) {
             drawRobot(gfx, robot);
-            System.out.println(robot.getXPos());
-            System.out.println(robot.getYPos());
+//            System.out.println(robot.getXPos());
+//            System.out.println(robot.getYPos());
         }
     }
 
@@ -145,9 +145,9 @@ public class JFXArena extends Pane
     {
         double robotx = robot.getXPos();
         double roboty = robot.getYPos();
-        System.out.println("X: " + robotx);
-        System.out.println("Y: " + roboty);
-        System.out.println("Delay:" + robot.getDelay());
+//        System.out.println("X: " + robotx);
+//        System.out.println("Y: " + roboty);
+//        System.out.println("Delay:" + robot.getDelay());
         Image robotImage = robot.getImage();
         String robotName = robot.getName();
         drawImage(gfx, robotImage, robotx, roboty, robot);
