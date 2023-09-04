@@ -29,18 +29,33 @@ public class Wall {
         wallState = new Built(this);
         this.xPos = xPos;
         this.yPos = yPos;
-
     }
 
     public void setWallState(WallState newState) {
         this.wallState = newState;
     }
 
+    public void setImage(Image image) {
+        this.image = image;
+    }
+
+    public Image getImage() {
+        return this.image;
+    }
+
+    public double getXPos() {
+        return this.xPos;
+    }
+
+    public double getYPos () {
+        return this.yPos;
+    }
+
     public void damageWall() {
         wallState.damage();
     }
 
-    public void destroy() {
+    public void destroyWall() {
         wallState.destroy();
     }
 }
