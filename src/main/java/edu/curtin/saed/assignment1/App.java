@@ -35,10 +35,15 @@ public class App extends Application
         );
 
         arena.setOnSquareClicked((x, y) -> {
-            // Create a wall at the clicked square and add it to the WallBuilder
-            Wall wall = new Wall(x, y); // You need to provide the appropriate constructor
-            logger.appendText("Add wall to the queue.");
-//            builder.buildWall(wall);
+            try {
+                // Create a wall at the clicked square and add it to the WallBuilder
+                Wall wall = new Wall(x, y); // You need to provide the appropriate constructor
+                builder.addWallToQueue(wall);
+                logger.appendText("Add wall to the queue. \n");
+            }
+            catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
         });
 
         toolbar.getItems().addAll(btn1, btn2, label);
@@ -72,9 +77,11 @@ public class App extends Application
 
 
         manager.run();
+        builder.run();
 
         stage.setOnCloseRequest(event -> {
             manager.shutdown();
+            builder.stop();
         });
     }
 }
