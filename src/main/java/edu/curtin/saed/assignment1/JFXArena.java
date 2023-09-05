@@ -27,6 +27,7 @@ public class JFXArena extends Pane
     private Canvas canvas; // Used to provide a 'drawing surface'.
     private List<ArenaListener> listeners = null;
     private ArrayBlockingQueue<Robot> robots;
+    private Wall wall;
 
     /**
      * Creates a new arena object, loading the robot image and initialising a drawing surface.
@@ -88,6 +89,10 @@ public class JFXArena extends Pane
             });
         }
         listeners.add(newListener);
+    }
+
+    public void setOnSquareClicked(ArenaListener listener) {
+        addListener(listener);
     }
 
     /**
@@ -152,6 +157,18 @@ public class JFXArena extends Pane
         String robotName = robot.getName();
         drawImage(gfx, robotImage, robotx, roboty, robot);
         drawLabel(gfx, robotName, robotx, roboty);
+    }
+
+    public void addWall(Wall wall) {
+        this.wall = wall;
+        layoutChildren();
+    }
+
+    private void drawWall(GraphicsContext gfx, Wall wall) {
+        double wallx = wall.getXPos();
+        double wally = wall.getYPos();
+        Image wallImage = wall.getImage();
+        gfx.drawImage(wallImage, wallx, wally);
     }
 
     /** 
