@@ -26,12 +26,20 @@ public class App extends Application
         Button btn1 = new Button("My Button 1");
         Button btn2 = new Button("My Button 2");
         Label label = new Label("Score: 999");
-
+        RobotManager manager = new RobotManager(arena);
+        WallBuilder builder = new WallBuilder(arena);
 
         arena.addListener((x, y) ->
 //                System.out.println("Arena click at (" + x + "," + y + ")")
                 logger.appendText("Arena click at (" + x + "," + y + ")\n")
         );
+
+        arena.setOnSquareClicked((x, y) -> {
+            // Create a wall at the clicked square and add it to the WallBuilder
+            Wall wall = new Wall(x, y); // You need to provide the appropriate constructor
+            logger.appendText("Add wall to the queue.");
+//            builder.buildWall(wall);
+        });
 
         toolbar.getItems().addAll(btn1, btn2, label);
 
@@ -57,7 +65,7 @@ public class App extends Application
         contentPane.setTop(toolbar);
         contentPane.setCenter(splitPane);
 
-        RobotManager manager = new RobotManager(arena);
+
         Scene scene = new Scene(contentPane, 800, 800);
         stage.setScene(scene);
         stage.show();
