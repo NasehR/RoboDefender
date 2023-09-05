@@ -1,7 +1,6 @@
 package edu.curtin.saed.assignment1;
 
 import javafx.scene.image.Image;
-
 import java.io.IOException;
 import java.io.InputStream;
 
