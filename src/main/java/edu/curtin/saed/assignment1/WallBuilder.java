@@ -21,14 +21,14 @@ public class WallBuilder {
     public void run () {
         Runnable addWallTask = () -> {
             try {
-                do {
+                while (true) {
                     synchronized (mutex) {
                         Thread.sleep(BUILDDELAY);
                         Wall wall = buildQueue.take();
                         // plot the wall on the arena.
                         System.out.println("Plot wall.\n");
                     }
-                } while (true);
+                }
             }
             catch (InterruptedException exception) {
                 Thread.currentThread().interrupt();

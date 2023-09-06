@@ -35,7 +35,7 @@ public class RobotManager implements Runnable {
                 System.out.println("Hello");
             }
             catch (InterruptedException e) {
-                throw new RuntimeException(e);
+
             }
         };
         return robotSpawnTask;
