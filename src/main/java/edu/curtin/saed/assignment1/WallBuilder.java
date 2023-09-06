@@ -1,5 +1,7 @@
 package edu.curtin.saed.assignment1;
 
+import javafx.application.Platform;
+
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 
@@ -25,8 +27,11 @@ public class WallBuilder {
                     synchronized (mutex) {
                         Thread.sleep(BUILDDELAY);
                         Wall wall = buildQueue.take();
-                        // plot the wall on the arena.
-                        System.out.println("Plot wall.\n");
+                        Platform.runLater(() -> {
+                            arena.addWall(wall);
+                            arena.layoutChildren();
+                            System.out.println("Plot wall.\n");
+                        });
                     }
                 }
             }
