@@ -6,9 +6,6 @@ import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-
 public class App extends Application
 {
     public static void main(String[] args)
@@ -42,7 +39,6 @@ public class App extends Application
                 logger.appendText("Add wall to the queue. \n");
             }
             catch (InterruptedException e) {
-                throw new RuntimeException(e);
             }
         });
 

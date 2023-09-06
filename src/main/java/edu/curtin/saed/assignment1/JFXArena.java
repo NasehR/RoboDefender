@@ -26,7 +26,7 @@ public class JFXArena extends Pane
     private double gridSquareSize; // Auto-calculated
     private Canvas canvas; // Used to provide a 'drawing surface'.
     private List<ArenaListener> listeners = null;
-    private ArrayBlockingQueue<Robot> robots;
+    private BlockingQueue<Robot> robots;
     private Wall wall;
 
     /**

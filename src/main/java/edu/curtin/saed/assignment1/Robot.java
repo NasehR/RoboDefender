@@ -7,7 +7,7 @@ import javafx.scene.image.Image;
 
 public class Robot
 {
-    private final String IMAGE_FILE = "rg1024-robot-carrying-things-4.png";
+    private final String IMAGEFILE = "rg1024-robot-carrying-things-4.png";
     private String id;
     private int d;
     private double xPos;
@@ -17,17 +17,17 @@ public class Robot
 
     public Robot (String id)
     {
-        try(InputStream is = getClass().getClassLoader().getResourceAsStream(IMAGE_FILE))
+        try(InputStream is = getClass().getClassLoader().getResourceAsStream(IMAGEFILE))
         {
             if(is == null)
             {
-                throw new AssertionError("Cannot find image file " + IMAGE_FILE);
+                throw new AssertionError("Cannot find image file " + IMAGEFILE);
             }
             image = new Image(is);
         }
         catch(IOException e)
         {
-            throw new AssertionError("Cannot load image file " + IMAGE_FILE, e);
+            throw new AssertionError("Cannot load image file " + IMAGEFILE, e);
         }
         this.id = id;
         this.d = delay();
