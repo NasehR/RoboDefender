@@ -1,6 +1,7 @@
 package edu.curtin.saed.assignment1;
 
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
@@ -78,6 +79,7 @@ public class App extends Application
         stage.setOnCloseRequest(event -> {
             manager.shutdown();
             builder.stop();
+            Platform.exit();
         });
     }
 }
