@@ -3,6 +3,7 @@ package edu.curtin.saed.assignment1;
 import javafx.scene.canvas.*;
 import javafx.geometry.VPos;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.TextAlignment;
@@ -144,6 +145,10 @@ public class JFXArena extends Pane
 //            System.out.println(robot.getXPos());
 //            System.out.println(robot.getYPos());
         }
+        if (wall != null) {
+            drawWall(gfx, wall);
+            this.wall = null;
+        }
     }
 
     private void drawRobot(GraphicsContext gfx, Robot robot)
@@ -161,14 +166,43 @@ public class JFXArena extends Pane
 
     public void addWall(Wall wall) {
         this.wall = wall;
-        layoutChildren();
     }
 
     private void drawWall(GraphicsContext gfx, Wall wall) {
         double wallx = wall.getXPos();
         double wally = wall.getYPos();
         Image wallImage = wall.getImage();
-        gfx.drawImage(wallImage, wallx, wally);
+
+        double fullSizePixelWidth = wall.getImage().getWidth();
+        double fullSizePixelHeight = wall.getImage().getHeight();
+
+        double displayedPixelWidth, displayedPixelHeight;
+        if(fullSizePixelWidth > fullSizePixelHeight)
+        {
+            // Here, the image is wider than it is high, so we'll display it such that it's as
+            // wide as a full grid cell, and the height will be set to preserve the aspect
+            // ratio.
+            displayedPixelWidth = gridSquareSize;
+            displayedPixelHeight = gridSquareSize * fullSizePixelHeight / fullSizePixelWidth;
+        }
+        else
+        {
+            // Otherwise, it's the other way around -- full height, and width is set to
+            // preserve the aspect ratio.
+            displayedPixelHeight = gridSquareSize;
+            displayedPixelWidth = gridSquareSize * fullSizePixelWidth / fullSizePixelHeight;
+        }
+
+        System.out.println("Wall x: " + wallx);
+        System.out.println("Wall y: " + wally);
+        System.out.println("Wall width: " + displayedPixelWidth);
+        System.out.println("Wall height: " + displayedPixelHeight);
+
+        gfx.drawImage(wallImage,
+                wallx,
+                wally,
+                displayedPixelWidth,
+                displayedPixelHeight);
     }
 
     /** 
