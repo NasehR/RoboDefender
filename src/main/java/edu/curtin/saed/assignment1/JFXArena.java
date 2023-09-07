@@ -28,7 +28,7 @@ public class JFXArena extends Pane
     private Canvas canvas; // Used to provide a 'drawing surface'.
     private List<ArenaListener> listeners = null;
     private BlockingQueue<Robot> robots;
-    private Wall wall;
+    private List<Wall> walls;
 
     /**
      * Creates a new arena object, loading the robot image and initialising a drawing surface.
@@ -46,7 +46,7 @@ public class JFXArena extends Pane
         // './gradlew run' and './gradlew build'.)
 
         robots = new ArrayBlockingQueue<>(10);
-
+        walls = new ArrayList<>();
         canvas = new Canvas();
         canvas.widthProperty().bind(widthProperty());
         canvas.heightProperty().bind(heightProperty());
@@ -145,9 +145,11 @@ public class JFXArena extends Pane
 //            System.out.println(robot.getXPos());
 //            System.out.println(robot.getYPos());
         }
-        if (wall != null) {
-            drawWall(gfx, wall);
-            this.wall = null;
+
+        for (Wall wall: walls) {
+            if (wall != null) {
+                drawWall(gfx, wall);
+            }
         }
     }
 
@@ -165,7 +167,7 @@ public class JFXArena extends Pane
     }
 
     public void addWall(Wall wall) {
-        this.wall = wall;
+        walls.add(wall);
     }
 
     private void drawWall(GraphicsContext gfx, Wall wall) {
@@ -195,11 +197,6 @@ public class JFXArena extends Pane
             displayedPixelHeight = gridSquareSize;
             displayedPixelWidth = gridSquareSize * fullSizePixelWidth / fullSizePixelHeight;
         }
-
-        System.out.println("Wall x: " + wallx);
-        System.out.println("Wall y: " + wally);
-        System.out.println("Wall width: " + displayedPixelWidth);
-        System.out.println("Wall height: " + displayedPixelHeight);
 
         gfx.drawImage(wallImage,
                 x,
