@@ -173,6 +173,9 @@ public class JFXArena extends Pane
         double wally = wall.getYPos();
         Image wallImage = wall.getImage();
 
+        double x = (wallx) * gridSquareSize;
+        double y = (wally) * gridSquareSize;
+
         double fullSizePixelWidth = wall.getImage().getWidth();
         double fullSizePixelHeight = wall.getImage().getHeight();
 
@@ -199,8 +202,8 @@ public class JFXArena extends Pane
         System.out.println("Wall height: " + displayedPixelHeight);
 
         gfx.drawImage(wallImage,
-                wallx,
-                wally,
+                x,
+                y,
                 displayedPixelWidth,
                 displayedPixelHeight);
     }
