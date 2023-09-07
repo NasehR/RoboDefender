@@ -7,15 +7,15 @@ public class RobotManager implements Runnable {
     private final int NUM_THREADS = 5;
 
     private JFXArena arena;
-    private ExecutorService robotThreadPool;
+    private ExecutorService threadPool;
     private BlockingQueue<RobotSpawner> robots;
     private Object mutex;
 
-    public RobotManager (JFXArena arena) {
+    public RobotManager (JFXArena arena, ExecutorService threadPool) {
         mutex = new Object();
         this.arena = arena;
         robots = new ArrayBlockingQueue<>(10);
-        robotThreadPool = Executors.newFixedThreadPool(NUM_THREADS);
+        this.threadPool = threadPool;
     }
 
     @Override
@@ -24,7 +24,7 @@ public class RobotManager implements Runnable {
         Runnable robotSpawnTask = spawnRobots();
 
         Thread robotSpawnThread = new Thread(robotSpawnTask);
-        robotThreadPool.submit(robotSpawnThread);
+        threadPool.submit(robotSpawnThread);
     }
 
     private Runnable spawnRobots () {
@@ -39,9 +39,5 @@ public class RobotManager implements Runnable {
             }
         };
         return robotSpawnTask;
-    }
-
-    public void shutdown() {
-        robotThreadPool.shutdown();
     }
 }
