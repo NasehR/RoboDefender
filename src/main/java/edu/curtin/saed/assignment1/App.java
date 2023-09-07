@@ -1,6 +1,7 @@
 package edu.curtin.saed.assignment1;
 
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
@@ -66,11 +67,9 @@ public class App extends Application
         contentPane.setTop(toolbar);
         contentPane.setCenter(splitPane);
 
-
         Scene scene = new Scene(contentPane, 800, 800);
         stage.setScene(scene);
         stage.show();
-
 
         manager.run();
         builder.run();
@@ -78,6 +77,7 @@ public class App extends Application
         stage.setOnCloseRequest(event -> {
             manager.shutdown();
             builder.stop();
+            Platform.exit();
         });
     }
 }
