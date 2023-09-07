@@ -67,11 +67,9 @@ public class App extends Application
         contentPane.setTop(toolbar);
         contentPane.setCenter(splitPane);
 
-
         Scene scene = new Scene(contentPane, 800, 800);
         stage.setScene(scene);
         stage.show();
-
 
         manager.run();
         builder.run();

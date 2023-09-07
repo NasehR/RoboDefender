@@ -28,7 +28,7 @@ public class JFXArena extends Pane
     private Canvas canvas; // Used to provide a 'drawing surface'.
     private List<ArenaListener> listeners = null;
     private BlockingQueue<Robot> robots;
-    private Wall wall;
+    private List<Wall> walls;
 
     /**
      * Creates a new arena object, loading the robot image and initialising a drawing surface.
@@ -46,7 +46,7 @@ public class JFXArena extends Pane
         // './gradlew run' and './gradlew build'.)
 
         robots = new ArrayBlockingQueue<>(10);
-
+        walls = new ArrayList<>();
         canvas = new Canvas();
         canvas.widthProperty().bind(widthProperty());
         canvas.heightProperty().bind(heightProperty());
@@ -145,6 +145,12 @@ public class JFXArena extends Pane
 //            System.out.println(robot.getXPos());
 //            System.out.println(robot.getYPos());
         }
+
+        for (Wall wall: walls) {
+            if (wall != null) {
+                drawWall(gfx, wall);
+            }
+        }
     }
 
     private void drawRobot(GraphicsContext gfx, Robot robot)
@@ -161,14 +167,44 @@ public class JFXArena extends Pane
     }
 
     public void addWall(Wall wall) {
-        this.wall = wall;
+        if (walls.size() < 10 ){
+        walls.add(wall);
+        }
     }
 
     private void drawWall(GraphicsContext gfx, Wall wall) {
         double wallx = wall.getXPos();
         double wally = wall.getYPos();
         Image wallImage = wall.getImage();
-        gfx.drawImage(wallImage, wallx, wally);
+
+        double x = (wallx) * gridSquareSize;
+        double y = (wally) * gridSquareSize;
+
+        double fullSizePixelWidth = wall.getImage().getWidth();
+        double fullSizePixelHeight = wall.getImage().getHeight();
+
+        double displayedPixelWidth, displayedPixelHeight;
+        if(fullSizePixelWidth > fullSizePixelHeight)
+        {
+            // Here, the image is wider than it is high, so we'll display it such that it's as
+            // wide as a full grid cell, and the height will be set to preserve the aspect
+            // ratio.
+            displayedPixelWidth = gridSquareSize;
+            displayedPixelHeight = gridSquareSize * fullSizePixelHeight / fullSizePixelWidth;
+        }
+        else
+        {
+            // Otherwise, it's the other way around -- full height, and width is set to
+            // preserve the aspect ratio.
+            displayedPixelHeight = gridSquareSize;
+            displayedPixelWidth = gridSquareSize * fullSizePixelWidth / fullSizePixelHeight;
+        }
+
+        gfx.drawImage(wallImage,
+                x,
+                y,
+                displayedPixelWidth,
+                displayedPixelHeight);
     }
 
     /** 

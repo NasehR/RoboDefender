@@ -25,14 +25,14 @@ public class WallBuilder {
             try {
                 while (true) {
                     synchronized (mutex) {
-                        Thread.sleep(BUILDDELAY);
                         Wall wall = buildQueue.take();
                         Platform.runLater(() -> {
                             arena.addWall(wall);
-                            arena.layoutChildren();
                             System.out.println("Plot wall.\n");
+                            arena.layoutChildren();
                         });
                     }
+                    Thread.sleep(BUILDDELAY);
                 }
             }
             catch (InterruptedException exception) {
