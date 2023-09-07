@@ -7,6 +7,9 @@ import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 public class App extends Application
 {
     public static void main(String[] args)
@@ -18,13 +21,14 @@ public class App extends Application
     public void start(Stage stage)
     {
         stage.setTitle("RoboDefender");
+        ExecutorService threadPool = Executors.newFixedThreadPool(15);
         JFXArena arena = new JFXArena();
         TextArea logger = new TextArea();
         ToolBar toolbar = new ToolBar();
         Button btn1 = new Button("My Button 1");
         Button btn2 = new Button("My Button 2");
         Label label = new Label("Score: 999");
-        RobotManager manager = new RobotManager(arena);
+        RobotManager manager = new RobotManager(arena, threadPool);
         WallBuilder builder = new WallBuilder(arena);
 
         arena.addListener((x, y) ->
@@ -75,7 +79,8 @@ public class App extends Application
         builder.run();
 
         stage.setOnCloseRequest(event -> {
-            manager.shutdown();
+//            manager.shutdown();
+            threadPool.shutdown();
             builder.stop();
             Platform.exit();
         });
