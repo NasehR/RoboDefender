@@ -310,9 +310,16 @@ public class JFXArena extends Pane
         return grid[x][y].isOccupied();
     }
 
+    public boolean isCoordinateOccupiedByWall(int x, int y) {
+        return grid[x][y].isOccupiedByWall();
+    }
     public void coordinateOccupied(GameObject coordinateObject) {
         int x = (int) coordinateObject.getXPos();
         int y = (int) coordinateObject.getYPos();
         grid[x][y].setCoordinateObject(coordinateObject);
+    }
+
+    public double getGridSquareSize(){
+        return this.gridSquareSize;
     }
 }
