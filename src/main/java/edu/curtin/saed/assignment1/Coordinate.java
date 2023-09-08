@@ -24,6 +24,10 @@ public class Coordinate {
         return this.occupied;
     }
 
+    public boolean isOccupiedByWall() {
+        return (coordinateObject instanceof Wall);
+    }
+
     public void setCoordinateObject(GameObject coordinateObject) {
         this.coordinateObject = coordinateObject;
         this.occupied = true;
