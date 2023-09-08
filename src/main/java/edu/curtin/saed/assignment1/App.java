@@ -80,7 +80,7 @@ public class App extends Application
 
         stage.setOnCloseRequest(event -> {
 //            manager.shutdown();
-            threadPool.shutdown();
+            threadPool.shutdownNow();
             builder.stop();
             Platform.exit();
         });
