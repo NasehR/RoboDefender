@@ -4,12 +4,9 @@ import javafx.scene.image.Image;
 import java.io.IOException;
 import java.io.InputStream;
 
-public class Wall {
+public class Wall extends GameObject{
     private final String IMAGE_FILE = "181478.png";
-    private double xPos;
-    private double yPos;
     public WallState wallState;
-    private Image image;
 
     public Wall(double xPos, double yPos) {
         try(InputStream is = getClass().getClassLoader().getResourceAsStream(IMAGE_FILE))
@@ -36,18 +33,6 @@ public class Wall {
 
     public void setImage(Image image) {
         this.image = image;
-    }
-
-    public Image getImage() {
-        return this.image;
-    }
-
-    public double getXPos() {
-        return this.xPos;
-    }
-
-    public double getYPos () {
-        return this.yPos;
     }
 
     public void damageWall() {

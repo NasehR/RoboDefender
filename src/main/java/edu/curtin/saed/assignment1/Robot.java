@@ -5,15 +5,11 @@ import java.io.InputStream;
 import java.util.Random;
 import javafx.scene.image.Image;
 
-public class Robot
-{
+public class Robot extends GameObject{
     private final String IMAGEFILE = "rg1024-robot-carrying-things-4.png";
     private String id;
     private int d;
-    private double xPos;
-    private double yPos;
     public RobotState robotState;
-    private Image image;
 
     public Robot (String id)
     {
@@ -48,21 +44,6 @@ public class Robot
     public String getName()
     {
         return this.id;
-    }
-
-    public Image getImage()
-    {
-        return this.image;
-    }
-
-    public double getXPos()
-    {
-        return this.xPos;
-    }
-
-    public double getYPos()
-    {
-        return this.yPos;
     }
 
     public int getDelay()
