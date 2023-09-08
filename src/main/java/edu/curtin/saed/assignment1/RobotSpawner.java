@@ -34,7 +34,7 @@ public class RobotSpawner {
                         newRobot.setPosition(xPos, yPos);
                         arena.addRobot(newRobot);
                         moveRobot(newRobot);
-                        arena.coordinateOccupied(0, 0, newRobot);;
+                        arena.coordinateOccupied(newRobot);;
                     }
                     break;
                 case TOP_RIGHT: // Top-right corner
@@ -45,7 +45,7 @@ public class RobotSpawner {
                         newRobot.setPosition(xPos, yPos);
                         arena.addRobot(newRobot);
                         moveRobot(newRobot);
-                        arena.coordinateOccupied(8, 0, newRobot);
+                        arena.coordinateOccupied(newRobot);
                     }
                     break;
                 case BOTTOM_LEFT: // Bottom-left corner
@@ -56,7 +56,7 @@ public class RobotSpawner {
                         newRobot.setPosition(xPos, yPos);
                         arena.addRobot(newRobot);
                         moveRobot(newRobot);
-                        arena.coordinateOccupied(0, 8, newRobot);
+                        arena.coordinateOccupied(newRobot);
                     }
                     break;
                 case BOTTOM_RIGHT: // Bottom-right corner
@@ -67,7 +67,7 @@ public class RobotSpawner {
                         newRobot.setPosition(xPos, yPos);
                         arena.addRobot(newRobot);
                         moveRobot(newRobot);
-                        arena.coordinateOccupied(8, 8, newRobot);
+                        arena.coordinateOccupied(newRobot);
                     }
                     break;
                 default:

@@ -28,6 +28,7 @@ public class WallBuilder {
                         Wall wall = buildQueue.take();
                         Platform.runLater(() -> {
                             arena.addWall(wall);
+                            arena.coordinateOccupied(wall);
                             System.out.println("Plot wall.\n");
                             arena.layoutChildren();
                         });
