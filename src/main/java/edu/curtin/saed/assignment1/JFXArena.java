@@ -29,6 +29,7 @@ public class JFXArena extends Pane
     private List<ArenaListener> listeners = null;
     private BlockingQueue<Robot> robots;
     private List<Wall> walls;
+    private Coordinate[][] grid;
 
     /**
      * Creates a new arena object, loading the robot image and initialising a drawing surface.
@@ -47,10 +48,16 @@ public class JFXArena extends Pane
 
         robots = new ArrayBlockingQueue<>(10);
         walls = new ArrayList<>();
+        grid = new Coordinate[gridWidth][gridHeight];
         canvas = new Canvas();
         canvas.widthProperty().bind(widthProperty());
         canvas.heightProperty().bind(heightProperty());
         getChildren().add(canvas);
+        for (int i = 0; i < gridWidth; i++) {
+            for (int j = 0; j < gridHeight; j++) {
+                grid[i][j] = new Coordinate(i,j);
+            }
+        }
     }
 
     /**
