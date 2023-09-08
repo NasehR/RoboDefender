@@ -30,7 +30,7 @@ public class RobotManager implements Runnable {
     private Runnable spawnRobots () {
         Runnable robotSpawnTask = () -> {
             try {
-                RobotSpawner robot = new RobotSpawner(arena);
+                RobotSpawner robot = new RobotSpawner(arena, threadPool);
                 robot.spawnRobots();
                 System.out.println("Hello");
             }

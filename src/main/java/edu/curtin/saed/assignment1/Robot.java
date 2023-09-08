@@ -36,6 +36,15 @@ public class Robot extends GameObject{
         this.yPos = yPos;
     }
 
+    public void setXPosition(double xPos)
+    {
+        this.xPos = xPos;
+    }
+
+    public void setYPosition(double yPos) {
+        this.yPos = yPos;
+    }
+
     public void setState(RobotState newState)
     {
         this.robotState = newState;
