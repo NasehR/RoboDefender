@@ -26,6 +26,7 @@ public class Coordinate {
 
     public void setCoordinateObject(GameObject coordinateObject) {
         this.coordinateObject = coordinateObject;
+        this.occupied = true;
     }
 
     public GameObject getCoordinateObject() {

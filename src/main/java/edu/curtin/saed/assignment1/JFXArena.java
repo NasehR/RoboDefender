@@ -53,9 +53,9 @@ public class JFXArena extends Pane
         canvas.widthProperty().bind(widthProperty());
         canvas.heightProperty().bind(heightProperty());
         getChildren().add(canvas);
-        for (int i = 0; i < gridWidth; i++) {
-            for (int j = 0; j < gridHeight; j++) {
-                grid[i][j] = new Coordinate(i,j);
+        for (double i = 0; i < gridWidth; i++) {
+            for (double j = 0; j < gridHeight; j++) {
+                grid[(int) i][(int) j] = new Coordinate(i,j);
             }
         }
     }
@@ -304,5 +304,13 @@ public class JFXArena extends Pane
         Robot robot = robots.take();
         layoutChildren(); // Redraw the arena to remove the robot
         return robot;
+    }
+
+    public boolean isCoordinateOccupied(int x, int y) {
+        return grid[x][y].isOccupied();
+    }
+
+    public void coordinateOccupied(int x, int y, GameObject coordinateObject) {
+        grid[x][y].setCoordinateObject(coordinateObject);
     }
 }
