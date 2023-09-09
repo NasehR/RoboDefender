@@ -5,25 +5,26 @@ import java.io.InputStream;
 import java.util.Random;
 import javafx.scene.image.Image;
 
-public class Robot extends GameObject{
-    private final String IMAGEFILE = "rg1024-robot-carrying-things-4.png";
+public class Robot extends GameObject {
+    @SuppressWarnings("PMD.FieldNamingConventions")
+    private final String IMAGE_FILE = "rg1024-robot-carrying-things-4.png";
     private String id;
     private int d;
     public RobotState robotState;
 
     public Robot (String id)
     {
-        try(InputStream is = getClass().getClassLoader().getResourceAsStream(IMAGEFILE))
+        try(InputStream is = getClass().getClassLoader().getResourceAsStream(IMAGE_FILE))
         {
             if(is == null)
             {
-                throw new AssertionError("Cannot find image file " + IMAGEFILE);
+                throw new AssertionError("Cannot find image file " + IMAGE_FILE);
             }
             image = new Image(is);
         }
         catch(IOException e)
         {
-            throw new AssertionError("Cannot load image file " + IMAGEFILE, e);
+            throw new AssertionError("Cannot load image file " + IMAGE_FILE, e);
         }
         this.id = id;
         this.d = delay();

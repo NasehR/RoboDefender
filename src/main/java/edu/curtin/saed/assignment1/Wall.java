@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 public class Wall extends GameObject{
+    @SuppressWarnings("PMD.FieldNamingConventions")
     private final String IMAGE_FILE = "181478.png";
     public WallState wallState;
     private JFXArena arena;
@@ -28,7 +29,7 @@ public class Wall extends GameObject{
         this.yPos = yPos;
     }
 
-    public void setWallState(WallState newState) {
+    public void setState(WallState newState) {
         this.wallState = newState;
     }
 

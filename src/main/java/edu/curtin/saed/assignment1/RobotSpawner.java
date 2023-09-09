@@ -8,9 +8,13 @@ import static java.lang.Math.*;
 
 public class RobotSpawner {
 
+    @SuppressWarnings("PMD.FieldNamingConventions")
     private final int TOP_LEFT = 0;
+    @SuppressWarnings("PMD.FieldNamingConventions")
     private final int TOP_RIGHT = 1;
+    @SuppressWarnings("PMD.FieldNamingConventions")
     private final int BOTTOM_LEFT = 2;
+    @SuppressWarnings("PMD.FieldNamingConventions")
     private final int BOTTOM_RIGHT = 3;
     private JFXArena arena;
     private int robotCount;
