@@ -164,11 +164,13 @@ public class RobotSpawner {
         if (wall.getStatus().equals("built")) {
             wall.damageWall();
             robot.dead();
+            arena.removeRobot(robot);
         }
         else {
             arena.removeWall(wall);
             wall.destroyWall();
             robot.dead();
+            arena.removeRobot(robot);
         }
 
     }

@@ -300,10 +300,11 @@ public class JFXArena extends Pane
         layoutChildren(); // Redraw the arena to show the new robot
     }
 
-    public Robot removeRobot() throws InterruptedException {
-        Robot robot = robots.take();
+    public void removeRobot(Robot robot) {
+        if (robots.contains(robot)) {
+            robots.remove(robot);
+        }
         layoutChildren(); // Redraw the arena to remove the robot
-        return robot;
     }
 
     public boolean isCoordinateOccupied(int x, int y) {
