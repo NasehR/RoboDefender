@@ -313,6 +313,7 @@ public class JFXArena extends Pane
     public boolean isCoordinateOccupiedByWall(int x, int y) {
         return grid[x][y].isOccupiedByWall();
     }
+
     public void coordinateOccupied(GameObject coordinateObject) {
         int x = (int) coordinateObject.getXPos();
         int y = (int) coordinateObject.getYPos();
@@ -326,4 +327,17 @@ public class JFXArena extends Pane
     public double getGridSquareSize(){
         return this.gridSquareSize;
     }
+
+    public Wall getWallAt(int x, int y) {
+        // Iterate through the list of walls to find the one at the specified position
+        Wall wall = null;
+        for (Wall w : walls) {
+            if (w.getXPos() == x && w.getYPos() == y) {
+                wall = w; // Return the wall at the specified position
+            }
+        }
+
+        return wall;
+    }
+
 }

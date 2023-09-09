@@ -131,13 +131,19 @@ public class RobotSpawner {
                                     });
                             }
 
-                            // Update the robot's position to the new coordinates
-                            robot.setPosition(newX, newY);
+                            if (arena.isCoordinateOccupiedByWall(newX, newY)) {
+                                robot.setPosition(newX, newY);
+                                handleCollisions(robot);
+                                arena.clearCoordinate((int) currentX, (int) currentY);
+                            }
 
-                            // Mark the new position as occupied
-                            arena.coordinateOccupied(robot);
+                            else {
+                                // Update the robot's position to the new coordinates
+                                robot.setPosition(newX, newY);
 
-                            arena.clearCoordinate((int) currentX, (int) currentY);
+                                // Mark the new position as occupied
+                                arena.coordinateOccupied(robot);
+                            }
                         }
                     }
                 }
@@ -147,10 +153,31 @@ public class RobotSpawner {
         threadPool.submit(moveRobotTask);
     }
 
+    private void handleCollisions(Robot robot) {
+        int robotX = (int) robot.getXPos();
+        int robotY = (int) robot.getYPos();
+
+        // Check if the robot is in a square with a wall
+        if (arena.isCoordinateOccupiedByWall(robotX, robotY)) {
+            // Get the wall at the robot's position
+            Wall wall = arena.getWallAt(robotX, robotY);
+
+            // Check if the wall is already weakened (first impact)
+            if (wall.getStatus().equals("built")) {
+                wall.damageWall();
+                robot.dead();
+                System.out.println("Wall Damaged And Robot Dead");
+            }
+            else if (wall.getStatus().equals("damaged")) {
+                wall.destroyWall();
+                robot.dead();
+                System.out.println("Wall Destroyed And Robot Dead");
+            }
+        }
+    }
 
     private boolean isValidMove(int newX, int newY) {
         return (!arena.isCoordinateOccupied(newX, newY) || arena.isCoordinateOccupiedByWall(newX, newY))
                 && newX >= 0 && newX < 9 && newY >= 0 && newY < 9;
     }
-
 }
