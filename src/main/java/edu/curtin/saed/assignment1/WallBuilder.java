@@ -6,8 +6,8 @@ import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 
 public class WallBuilder {
-    private final int MAXWALLS = 10;
-    private final long BUILDDELAY = 2000; // 2000 milliseconds
+    private final int MAX_WALLS = 10;
+    private final long BUILD_DELAY = 2000; // 2000 milliseconds
     private final JFXArena arena;
     private final BlockingQueue<Wall> buildQueue;
     private Thread addingWallThread = null;
@@ -16,7 +16,7 @@ public class WallBuilder {
 
     public WallBuilder(JFXArena arena) {
         this.arena = arena;
-        buildQueue = new ArrayBlockingQueue<>(MAXWALLS);
+        buildQueue = new ArrayBlockingQueue<>(MAX_WALLS);
         mutex = new Object();
     }
 
@@ -33,7 +33,7 @@ public class WallBuilder {
                             arena.layoutChildren();
                         });
                     }
-                    Thread.sleep(BUILDDELAY);
+                    Thread.sleep(BUILD_DELAY);
                 }
             }
             catch (InterruptedException exception) {
@@ -52,7 +52,7 @@ public class WallBuilder {
     }
 
     public void addWallToQueue(Wall wall) throws InterruptedException {
-        if (buildQueue.size() < MAXWALLS) {
+        if (buildQueue.size() < MAX_WALLS) {
             buildQueue.put(wall); // Add the wall to the queue
         }
     }
