@@ -33,6 +33,10 @@ public class Coordinate {
         this.occupied = true;
     }
 
+    public void clear() {
+        this.occupied = false;
+    }
+
     public GameObject getCoordinateObject() {
         return this.coordinateObject;
     }

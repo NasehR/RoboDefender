@@ -319,6 +319,10 @@ public class JFXArena extends Pane
         grid[x][y].setCoordinateObject(coordinateObject);
     }
 
+    public void clearCoordinate(int x, int y) {
+        this.grid[x][y].clear();
+    }
+
     public double getGridSquareSize(){
         return this.gridSquareSize;
     }
