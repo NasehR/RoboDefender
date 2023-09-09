@@ -9,16 +9,21 @@ public class Destroy extends WallState{
     }
     @Override
     public void built() {
-
+        // do nothing
     }
 
     @Override
     public void damage() {
-
+        // do nothing
     }
 
     @Override
     public void destroy() {
+        // remove the wall from the arena
+    }
 
+    @Override
+    public String toString() {
+        return "destroy";
     }
 }

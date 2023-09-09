@@ -7,8 +7,9 @@ import java.io.InputStream;
 public class Wall extends GameObject{
     private final String IMAGE_FILE = "181478.png";
     public WallState wallState;
+    private JFXArena arena;
 
-    public Wall(double xPos, double yPos) {
+    public Wall(JFXArena arena, double xPos, double yPos) {
         try(InputStream is = getClass().getClassLoader().getResourceAsStream(IMAGE_FILE))
         {
             if(is == null)
@@ -31,6 +32,10 @@ public class Wall extends GameObject{
         this.wallState = newState;
     }
 
+    public String getStatus() {
+        return wallState.toString();
+    }
+
     public void setImage(Image image) {
         this.image = image;
     }
@@ -41,5 +46,9 @@ public class Wall extends GameObject{
 
     public void destroyWall() {
         wallState.destroy();
+    }
+
+    public JFXArena getArena() {
+        return this.arena;
     }
 }

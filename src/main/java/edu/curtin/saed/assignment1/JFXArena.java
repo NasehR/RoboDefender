@@ -340,4 +340,10 @@ public class JFXArena extends Pane
         return wall;
     }
 
+    public void removeWall(Wall wall) {
+        if (walls.contains(wall)) {
+            walls.remove(wall);
+            System.out.println("wall removed");
+        }
+    }
 }
