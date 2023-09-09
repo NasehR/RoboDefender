@@ -20,7 +20,6 @@ public class Damaged extends WallState {
     @Override
     public void destroy() {
         wall.setWallState(new Destroy(wall));
-        wall.getArena().removeWall(wall);
     }
 
     @Override

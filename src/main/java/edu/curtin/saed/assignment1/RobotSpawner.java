@@ -162,16 +162,16 @@ public class RobotSpawner {
             // Get the wall at the robot's position
             Wall wall = arena.getWallAt(robotX, robotY);
 
-            // Check if the wall is already weakened (first impact)
+            System.out.println(wall.getStatus());
+            // Check if the wall is already impacted (first impact)
             if (wall.getStatus().equals("built")) {
                 wall.damageWall();
                 robot.dead();
-                System.out.println("Wall Damaged And Robot Dead");
             }
-            else if (wall.getStatus().equals("damaged")) {
+            else {
+                arena.removeWall(wall);
                 wall.destroyWall();
                 robot.dead();
-                System.out.println("Wall Destroyed And Robot Dead");
             }
         }
     }
