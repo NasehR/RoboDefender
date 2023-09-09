@@ -41,7 +41,7 @@ public class RobotSpawner {
                         newRobot.setPosition(xPos, yPos);
                         arena.addRobot(newRobot);
                         moveRobot(newRobot);
-                        arena.coordinateOccupied(newRobot);;
+                        arena.coordinateOccupied(newRobot);
                     }
                     break;
                 case TOP_RIGHT: // Top-right corner
@@ -84,50 +84,69 @@ public class RobotSpawner {
         }
     }
 
-    private void moveRobot(Robot robot) throws InterruptedException {
+    private void moveRobot(Robot robot) {
         Runnable moveRobotTask = () -> {
             try {
-                double moveStep = arena.getGridSquareSize() / 500; // Divide the movement into 40 steps
+                double moveStep = arena.getGridSquareSize() / 10; // Divide the movement into 10 steps
                 int targetX = 4; // Target X coordinate (citadel's X coordinate)
                 int targetY = 4; // Target Y coordinate (citadel's Y coordinate)
 
-                while (robot.getXPos() != targetX && robot.getYPos() != targetY) {
-                    Thread.sleep(robot.getDelay()); // Divide the delay into 40 steps
+                while (robot.getXPos() != targetX || robot.getYPos() != targetY) {
+                    Thread.sleep(robot.getDelay());
 
                     // Calculate the difference between the current position and the target
                     int xDiff = targetX - (int) robot.getXPos();
                     int yDiff = targetY - (int) robot.getYPos();
 
-                    // Determine the direction to move (horizontal or vertical)
+                    int newX, newY;
+
                     if (Math.abs(xDiff) >= Math.abs(yDiff)) {
                         // Move horizontally
-                        int newX = (int) robot.getXPos() + (xDiff > 0 ? 1 : -1);
-                        int newY = (int) robot.getYPos();
-                        synchronized (lock) {
-                            if (isValidMove(newX, newY)) {
-                                robot.setXPosition(robot.getXPos() + (xDiff > 0 ? moveStep : -moveStep));
-                            }
-                        }
+                        newX = (int) robot.getXPos() + (xDiff > 0 ? 1 : -1);
+                        newY = (int) robot.getYPos();
                     } else {
                         // Move vertically
-                        int newX = (int) robot.getXPos();
-                        int newY = (int) robot.getYPos() + (yDiff > 0 ? 1 : -1);
-                        synchronized (lock) {
-                            if (isValidMove(newX, newY)) {
-                                robot.setYPosition(robot.getYPos() + (yDiff > 0 ? moveStep : -moveStep));
-                            }
-                        }
+                        newX = (int) robot.getXPos();
+                        newY = (int) robot.getYPos() + (yDiff > 0 ? 1 : -1);
                     }
 
-                    // Redraw the arena to show the updated robot position
-                    Platform.runLater(() -> arena.layoutChildren());
+                    // Check if the new position is valid
+//                    synchronized (lock) {
+                    synchronized (lock) {
+                        if (isValidMove(newX, newY)) {
+                            double currentX = robot.getXPos();
+                            double currentY = robot.getYPos();
+
+                            // Animate the robot's movement in 10 steps
+                            for (int step = 0; step < 10; step++) {
+                                    Thread.sleep(40); // 40 milliseconds (25 frames per second)
+                                    double fraction = (double) step / 10.0;
+                                    double intermediateX = currentX + fraction * (newX - currentX);
+                                    double intermediateY = currentY + fraction * (newY - currentY);
+                                    robot.setPosition(intermediateX, intermediateY);
+
+                                    // Redraw the arena to show the updated robot position
+                                    Platform.runLater(() -> {
+                                        arena.layoutChildren();
+                                    });
+                            }
+
+                            // Update the robot's position to the new coordinates
+                            robot.setPosition(newX, newY);
+
+                            // Mark the new position as occupied
+                            arena.coordinateOccupied(robot);
+
+                            arena.clearCoordinate((int) currentX, (int) currentY);
+                        }
+                    }
                 }
-            }
-            catch (InterruptedException e) { }
+            } catch (InterruptedException e) {}
         };
 
         threadPool.submit(moveRobotTask);
     }
+
 
     private boolean isValidMove(int newX, int newY) {
         return (!arena.isCoordinateOccupied(newX, newY) || arena.isCoordinateOccupiedByWall(newX, newY))
