@@ -40,8 +40,8 @@ public class RobotSpawner {
                         Robot newRobot = new Robot(Integer.toString(++robotCount));
                         newRobot.setPosition(xPos, yPos);
                         arena.addRobot(newRobot);
-                        moveRobot(newRobot);
                         arena.coordinateOccupied(newRobot);
+                        moveRobot(newRobot);
                     }
                     break;
                 case TOP_RIGHT: // Top-right corner
@@ -51,8 +51,8 @@ public class RobotSpawner {
                         Robot newRobot = new Robot(Integer.toString(++robotCount));
                         newRobot.setPosition(xPos, yPos);
                         arena.addRobot(newRobot);
-                        moveRobot(newRobot);
                         arena.coordinateOccupied(newRobot);
+                        moveRobot(newRobot);
                     }
                     break;
                 case BOTTOM_LEFT: // Bottom-left corner
@@ -62,8 +62,8 @@ public class RobotSpawner {
                         Robot newRobot = new Robot(Integer.toString(++robotCount));
                         newRobot.setPosition(xPos, yPos);
                         arena.addRobot(newRobot);
-                        moveRobot(newRobot);
                         arena.coordinateOccupied(newRobot);
+                        moveRobot(newRobot);
                     }
                     break;
                 case BOTTOM_RIGHT: // Bottom-right corner
@@ -73,8 +73,8 @@ public class RobotSpawner {
                         Robot newRobot = new Robot(Integer.toString(++robotCount));
                         newRobot.setPosition(xPos, yPos);
                         arena.addRobot(newRobot);
-                        moveRobot(newRobot);
                         arena.coordinateOccupied(newRobot);
+                        moveRobot(newRobot);
                     }
                     break;
                 default:
@@ -143,6 +143,9 @@ public class RobotSpawner {
 
                                 // Mark the new position as occupied
                                 arena.coordinateOccupied(robot);
+
+                                arena.clearCoordinate((int) currentX, (int) currentY);
+
                             }
                         }
                     }
@@ -157,23 +160,21 @@ public class RobotSpawner {
         int robotX = (int) robot.getXPos();
         int robotY = (int) robot.getYPos();
 
-        // Check if the robot is in a square with a wall
-        if (arena.isCoordinateOccupiedByWall(robotX, robotY)) {
-            // Get the wall at the robot's position
-            Wall wall = arena.getWallAt(robotX, robotY);
+        // Get the wall at the robot's position
+        Wall wall = arena.getWallAt(robotX, robotY);
 
-            System.out.println(wall.getStatus());
-            // Check if the wall is already impacted (first impact)
-            if (wall.getStatus().equals("built")) {
-                wall.damageWall();
-                robot.dead();
-            }
-            else {
-                arena.removeWall(wall);
-                wall.destroyWall();
-                robot.dead();
-            }
+        System.out.println(wall.getStatus());
+        // Check if the wall is already impacted (first impact)
+        if (wall.getStatus().equals("built")) {
+            wall.damageWall();
+            robot.dead();
         }
+        else {
+            arena.removeWall(wall);
+            wall.destroyWall();
+            robot.dead();
+        }
+
     }
 
     private boolean isValidMove(int newX, int newY) {
