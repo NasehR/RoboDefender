@@ -6,7 +6,9 @@ import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 
 public class WallBuilder {
+    @SuppressWarnings("PMD.FieldNamingConventions")
     private final int MAX_WALLS = 10;
+    @SuppressWarnings("PMD.FieldNamingConventions")
     private final long BUILD_DELAY = 2000; // 2000 milliseconds
     private final JFXArena arena;
     private final BlockingQueue<Wall> buildQueue;
