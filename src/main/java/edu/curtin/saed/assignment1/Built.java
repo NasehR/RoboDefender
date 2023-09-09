@@ -19,7 +19,7 @@ public class Built extends WallState {
 
     @Override
     public void damage() {
-        wall.setWallState(new Damaged(wall));
+        wall.setState(new Damaged(wall));
 
         try(InputStream is = getClass().getClassLoader().getResourceAsStream("181479.png"))
         {
