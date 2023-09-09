@@ -111,42 +111,38 @@ public class RobotSpawner {
                     }
 
                     // Check if the new position is valid
-//                    synchronized (lock) {
-                    synchronized (lock) {
-                        if (isValidMove(newX, newY)) {
-                            double currentX = robot.getXPos();
-                            double currentY = robot.getYPos();
+                    if (isValidMove(newX, newY)) {
+                        double currentX = robot.getXPos();
+                        double currentY = robot.getYPos();
 
-                            // Animate the robot's movement in 10 steps
-                            for (int step = 0; step < 10; step++) {
-                                    Thread.sleep(40); // 40 milliseconds (25 frames per second)
-                                    double fraction = (double) step / 10.0;
-                                    double intermediateX = currentX + fraction * (newX - currentX);
-                                    double intermediateY = currentY + fraction * (newY - currentY);
-                                    robot.setPosition(intermediateX, intermediateY);
+                        // Animate the robot's movement in 10 steps
+                        for (int step = 0; step < 10; step++) {
+                            synchronized (lock) {
+                                Thread.sleep(40); // 40 milliseconds (25 frames per second)
+                                double fraction = (double) step / 10.0;
+                                double intermediateX = currentX + fraction * (newX - currentX);
+                                double intermediateY = currentY + fraction * (newY - currentY);
+                                robot.setPosition(intermediateX, intermediateY);
 
-                                    // Redraw the arena to show the updated robot position
-                                    Platform.runLater(() -> {
-                                        arena.layoutChildren();
-                                    });
+                                // Redraw the arena to show the updated robot position
+                                Platform.runLater(() -> {
+                                    arena.layoutChildren();
+                                });
                             }
+                        }
 
-                            if (arena.isCoordinateOccupiedByWall(newX, newY)) {
-                                robot.setPosition(newX, newY);
-                                handleCollisions(robot);
-                                arena.clearCoordinate((int) currentX, (int) currentY);
-                            }
+                        if (arena.isCoordinateOccupiedByWall(newX, newY)) {
+                            robot.setPosition(newX, newY);
+                            handleCollisions(robot);
+                            arena.clearCoordinate((int) currentX, (int) currentY);
+                        }
 
-                            else {
-                                // Update the robot's position to the new coordinates
-                                robot.setPosition(newX, newY);
-
-                                // Mark the new position as occupied
-                                arena.coordinateOccupied(robot);
-
-                                arena.clearCoordinate((int) currentX, (int) currentY);
-
-                            }
+                        else {
+                            // Update the robot's position to the new coordinates
+                            robot.setPosition(newX, newY);
+                            // Mark the new position as occupied
+                            arena.coordinateOccupied(robot);
+                            arena.clearCoordinate((int) currentX, (int) currentY);
                         }
                     }
                 }
