@@ -1,7 +1,7 @@
 package edu.curtin.saed.assignment1;
 
 public abstract class RobotState {
-    Robot robot;
+    /* default */ Robot robot;
 
     public RobotState(Robot robot) {
         this.robot = robot;

@@ -91,7 +91,6 @@ public class RobotSpawner {
     private void moveRobot(Robot robot) {
         Runnable moveRobotTask = () -> {
             try {
-                double moveStep = arena.getGridSquareSize() / 10; // Divide the movement into 10 steps
                 int targetX = 4; // Target X coordinate (citadel's X coordinate)
                 int targetY = 4; // Target Y coordinate (citadel's Y coordinate)
 
@@ -104,7 +103,7 @@ public class RobotSpawner {
 
                     int newX, newY;
 
-                    if (Math.abs(xDiff) >= Math.abs(yDiff)) {
+                    if (abs(xDiff) >= abs(yDiff)) {
                         // Move horizontally
                         newX = (int) robot.getXPos() + (xDiff > 0 ? 1 : -1);
                         newY = (int) robot.getYPos();

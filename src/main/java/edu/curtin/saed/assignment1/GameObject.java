@@ -2,6 +2,7 @@ package edu.curtin.saed.assignment1;
 
 import javafx.scene.image.Image;
 
+@SuppressWarnings("PMD.AbstractClassWithoutAbstractMethod")
 public abstract class GameObject {
     protected double xPos;
     protected double yPos;
