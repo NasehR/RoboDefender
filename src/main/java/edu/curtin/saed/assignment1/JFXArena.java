@@ -142,7 +142,9 @@ public class JFXArena extends Pane
             }
         }
 
-        drawCitadel(gfx, citadel);
+        if (citadel != null) {
+            drawCitadel(gfx, citadel);
+        }
     }
 
     private void drawCitadel(GraphicsContext gfx, Citadel citadel) {
@@ -357,6 +359,7 @@ public class JFXArena extends Pane
         int citadelX = (int) citadel.getXPos();
         int citadelY = (int) citadel.getYPos();
         grid[citadelX][citadelY].clear();
+        citadel = null;
     }
 
     public boolean continueGame() {
@@ -364,9 +367,9 @@ public class JFXArena extends Pane
     }
 
     public void finishGame(Robot robot) throws InterruptedException {
+        this.continueGame = false;
         robot.dead();
         removeCitadel();
         removeRobot(robot);
-        this.continueGame = false;
     }
 }
