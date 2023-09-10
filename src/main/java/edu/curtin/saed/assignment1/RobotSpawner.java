@@ -148,7 +148,11 @@ public class RobotSpawner {
                             arena.clearCoordinate((int) currentX, (int) currentY);
                             handleCollisions(robot);
                         }
-
+                        else if (arena.isCoordinateOccupiedByCitadel(newX, newY)) {
+                            robot.setPosition(newX, newY);
+                            arena.clearCoordinate((int) currentX, (int) currentY);
+                            handleCollisions(robot);
+                        }
                         else {
                             // Update the robot's position to the new coordinates
                             robot.setPosition(newX, newY);
@@ -173,20 +177,34 @@ public class RobotSpawner {
         // Get the wall at the robot's position
         Wall wall = arena.getWallAt(robotX, robotY);
 
-        System.out.println(wall.getStatus());
-        // Check if the wall is already impacted (first impact)
-        if (wall.getStatus().equals("built")) {
-            wall.damageWall();
-            logCollision(robot, wall);
-        }
-        else {
-            arena.removeWall(wall);
-            wall.destroyWall();
-            logCollision(robot, wall);
+        GameObject coordinateObject = arena.coordinateOccupiedBy(robotX, robotY);
 
+        System.out.println("coordinateObject instanceof Wall: " + (coordinateObject instanceof Wall));
+        System.out.println("coordinateObject instanceof Citadel: " + (coordinateObject instanceof Citadel));
+
+        if (coordinateObject instanceof Wall) {
+            System.out.println(wall.getStatus());
+            // Check if the wall is already impacted (first impact)
+            if (wall.getStatus().equals("built")) {
+                wall.damageWall();
+                logCollision(robot, wall);
+            }
+            else {
+                arena.removeWall(wall);
+                wall.destroyWall();
+                logCollision(robot, wall);
+            }
+            robot.dead();
+            arena.removeRobot(robot);
         }
-        robot.dead();
-        arena.removeRobot(robot);
+        else if (coordinateObject instanceof Citadel) {
+
+            System.out.println("GAME OVER.");
+            robot.dead();
+            arena.removeRobot(robot);
+            arena.removeCitadel();
+        }
+
     }
 
     private void logCollision(Robot robot, Wall wall) {
@@ -208,7 +226,7 @@ public class RobotSpawner {
     }
 
     private boolean isValidMove(int newX, int newY) {
-        return (!arena.isCoordinateOccupied(newX, newY) || arena.isCoordinateOccupiedByWall(newX, newY))
+        return (!arena.isCoordinateOccupied(newX, newY) || arena.isCoordinateOccupiedByWall(newX, newY) || arena.isCoordinateOccupiedByCitadel(newX, newY) )
                 && newX >= 0 && newX < 9 && newY >= 0 && newY < 9;
     }
 }

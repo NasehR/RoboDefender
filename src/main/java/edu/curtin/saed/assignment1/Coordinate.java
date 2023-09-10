@@ -40,4 +40,8 @@ public class Coordinate {
     public GameObject getCoordinateObject() {
         return this.coordinateObject;
     }
+
+    public boolean isOccupiedByCitadel() {
+        return (coordinateObject instanceof Citadel);
+    }
 }

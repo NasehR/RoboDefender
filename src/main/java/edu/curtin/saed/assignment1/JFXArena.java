@@ -306,10 +306,18 @@ public class JFXArena extends Pane
         return grid[x][y].isOccupiedByWall();
     }
 
+    public boolean isCoordinateOccupiedByCitadel(int x, int y) {
+        return grid[x][y].isOccupiedByCitadel();
+    }
+
     public void coordinateOccupied(GameObject coordinateObject) {
         int x = (int) coordinateObject.getXPos();
         int y = (int) coordinateObject.getYPos();
         grid[x][y].setCoordinateObject(coordinateObject);
+    }
+
+    public GameObject coordinateOccupiedBy(int x, int y) {
+        return grid[x][y].getCoordinateObject();
     }
 
     public void clearCoordinate(int x, int y) {
@@ -340,5 +348,14 @@ public class JFXArena extends Pane
 
     public void addCitadel(Citadel citadel) {
         this.citadel = citadel;
+        int citadelX = (int) citadel.getXPos();
+        int citadelY = (int) citadel.getYPos();
+        grid[citadelX][citadelY].setCoordinateObject(citadel);
+    }
+
+    public void removeCitadel() {
+        int citadelX = (int) citadel.getXPos();
+        int citadelY = (int) citadel.getYPos();
+        grid[citadelX][citadelY].clear();
     }
 }
