@@ -13,7 +13,6 @@ public class WallBuilder {
     private final JFXArena arena;
     private final BlockingQueue<Wall> buildQueue;
     private Thread addingWallThread = null;
-    private Thread displayingWallThread = null;
     private final Object mutex;
 
     public WallBuilder(JFXArena arena) {

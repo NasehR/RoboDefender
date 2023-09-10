@@ -6,7 +6,6 @@ import javafx.scene.image.Image;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.TextAlignment;
-
 import java.util.*;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -21,8 +20,6 @@ public class JFXArena extends Pane
     // requirements of your application.
     private final int gridWidth = 9;
     private final int gridHeight = 9;
-    private double robotX = 1.0;
-    private double robotY = 3.0;
     private double gridSquareSize; // Auto-calculated
     private Canvas canvas; // Used to provide a 'drawing surface'.
     private List<ArenaListener> listeners = null;
