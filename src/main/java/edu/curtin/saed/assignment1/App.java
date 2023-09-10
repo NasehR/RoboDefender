@@ -29,19 +29,13 @@ public class App extends Application
         Button btn2 = new Button("My Button 2");
         Label label = new Label("Score: 999");
         RobotManager manager = new RobotManager(arena, threadPool);
-        WallBuilder builder = new WallBuilder(arena, threadPool);
-
-        arena.addListener((x, y) ->
-//                System.out.println("Arena click at (" + x + "," + y + ")")
-                logger.appendText("Arena click at (" + x + "," + y + ")\n")
-        );
+        WallBuilder builder = new WallBuilder(arena, threadPool, logger);
 
         arena.setOnSquareClicked((x, y) -> {
             try {
                 // Create a wall at the clicked square and add it to the WallBuilder
                 Wall wall = new Wall(x, y); // You need to provide the appropriate constructor
                 builder.addWallToQueue(wall);
-                logger.appendText("Add wall to the queue. \n");
             }
             catch (InterruptedException e) {
             }
@@ -79,9 +73,7 @@ public class App extends Application
         builder.run();
 
         stage.setOnCloseRequest(event -> {
-//            manager.shutdown();
             threadPool.shutdownNow();
-//            builder.stop();
             Platform.exit();
         });
     }

@@ -150,8 +150,8 @@ public class JFXArena extends Pane
     }
 
     public void addWall(Wall wall) {
-        if (walls.size() < 10 ){
-        walls.add(wall);
+        if (walls.size() < 10 ) {
+            walls.add(wall);
         }
     }
 

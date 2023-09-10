@@ -1,6 +1,7 @@
 package edu.curtin.saed.assignment1;
 
 import javafx.application.Platform;
+import javafx.scene.control.TextArea;
 
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
@@ -16,12 +17,14 @@ public class WallBuilder {
 //    private Thread addingWallThread = null;
     private final Object mutex;
     private ExecutorService threadPool;
+    private TextArea logger;
 
-    public WallBuilder(JFXArena arena, ExecutorService threadPool) {
+    public WallBuilder(JFXArena arena, ExecutorService threadPool, TextArea logger) {
         this.arena = arena;
         buildQueue = new ArrayBlockingQueue<>(MAX_WALLS);
         mutex = new Object();
         this.threadPool = threadPool;
+        this.logger = logger;
     }
 
     public void run () {
@@ -32,8 +35,10 @@ public class WallBuilder {
                         Wall wall = buildQueue.take();
                         Platform.runLater(() -> {
                             arena.addWall(wall);
+                            int xPosition = (int) wall.getXPos() + 1;
+                            int yPosition = (int) wall.getYPos() + 1;
+                            logger.appendText("Wall built at position (" + xPosition + "," + yPosition + ")\n");
                             arena.coordinateOccupied(wall);
-                            System.out.println("Plot wall.\n");
                             arena.layoutChildren();
                         });
                     }
