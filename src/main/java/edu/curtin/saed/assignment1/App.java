@@ -34,13 +34,14 @@ public class App extends Application
         arena.setOnSquareClicked((x, y) -> {
             try {
                 // Create a wall at the clicked square and add it to the WallBuilder
-                Wall wall = new Wall(x, y); // You need to provide the appropriate constructor
-                builder.addWallToQueue(wall);
+                if (!(x == 4 && y == 4)) {
+                    Wall wall = new Wall(x, y); // You need to provide the appropriate constructor
+                    builder.addWallToQueue(wall);
+                }
             }
             catch (InterruptedException e) {
             }
         });
-
 
         logger.appendText("Welcome to RoboDefender\n");
         toolbar.getItems().addAll(label);
