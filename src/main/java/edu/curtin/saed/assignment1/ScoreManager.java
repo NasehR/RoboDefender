@@ -27,7 +27,6 @@ public class ScoreManager {
     public void incrementScore(int points) {
         // Increment the score
         score += points;
-        System.out.println("Score: " + score); // You can replace this with your desired action
     }
 
     public void incrementScoreOnRobotDestroyed() {
