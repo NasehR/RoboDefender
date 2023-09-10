@@ -26,6 +26,7 @@ public class JFXArena extends Pane
     private BlockingQueue<Robot> robots;
     private List<Wall> walls;
     private Coordinate[][] grid;
+    private Citadel citadel;
 
     /**
      * Creates a new arena object, loading the robot image and initialising a drawing surface.
@@ -138,6 +139,43 @@ public class JFXArena extends Pane
                 drawWall(gfx, wall);
             }
         }
+
+        drawCitadel(gfx, citadel);
+    }
+
+    private void drawCitadel(GraphicsContext gfx, Citadel citadel) {
+        double citadelX = citadel.getXPos();
+        double citadelY = citadel.getYPos();
+        Image citadelImage = citadel.getImage();
+
+        double x = (citadelX) * gridSquareSize;
+        double y = (citadelY) * gridSquareSize;
+
+        double fullSizePixelWidth = citadel.getImage().getWidth();
+        double fullSizePixelHeight = citadel.getImage().getHeight();
+
+        double displayedPixelWidth, displayedPixelHeight;
+        if(fullSizePixelWidth > fullSizePixelHeight)
+        {
+            // Here, the image is wider than it is high, so we'll display it such that it's as
+            // wide as a full grid cell, and the height will be set to preserve the aspect
+            // ratio.
+            displayedPixelWidth = gridSquareSize;
+            displayedPixelHeight = gridSquareSize * fullSizePixelHeight / fullSizePixelWidth;
+        }
+        else
+        {
+            // Otherwise, it's the other way around -- full height, and width is set to
+            // preserve the aspect ratio.
+            displayedPixelHeight = gridSquareSize;
+            displayedPixelWidth = gridSquareSize * fullSizePixelWidth / fullSizePixelHeight;
+        }
+
+        gfx.drawImage(citadelImage,
+                x,
+                y,
+                displayedPixelWidth,
+                displayedPixelHeight);
     }
 
     private void drawRobot(GraphicsContext gfx, Robot robot) {
@@ -146,7 +184,6 @@ public class JFXArena extends Pane
         Image robotImage = robot.getImage();
         String robotName = robot.getName();
         drawImage(gfx, robotImage, robotX, robotY, robot);
-        drawLabel(gfx, robotName, robotX, robotY);
     }
 
     public void addWall(Wall wall) {
@@ -299,5 +336,9 @@ public class JFXArena extends Pane
         if (walls.contains(wall)) {
             walls.remove(wall);
         }
+    }
+
+    public void addCitadel(Citadel citadel) {
+        this.citadel = citadel;
     }
 }
