@@ -22,6 +22,7 @@ public class RobotSpawner {
     private ExecutorService threadPool;
     private final Object lock;
     private final Object mutex;
+    private final Object mutex2;
     private TextArea logger;
 
     public RobotSpawner(JFXArena arena, ExecutorService threadPool, TextArea logger) {
@@ -30,6 +31,7 @@ public class RobotSpawner {
         this.threadPool = threadPool;
         lock = new Object();
         mutex = new Object();
+        mutex2 = new Object();
         this.logger = logger;
     }
 
@@ -183,20 +185,19 @@ public class RobotSpawner {
             // Check if the wall is already impacted (first impact)
             if (wall.getStatus().equals("built")) {
                 wall.damageWall();
-                logCollision(robot, wall);
             }
             else {
                 arena.removeWall(wall);
                 wall.destroyWall();
-                logCollision(robot, wall);
             }
+            logCollision(robot, wall);
             robot.dead();
             arena.removeRobot(robot);
         }
         else if (coordinateObject instanceof Citadel) {
+            logEndGame();
             arena.finishGame(robot);
         }
-
     }
 
     private void logCollision(Robot robot, Wall wall) {
@@ -213,6 +214,15 @@ public class RobotSpawner {
             Platform.runLater(() -> {
                 logger.appendText(logWallMessage + "\n");
                 logger.appendText(logRobotMessage + "\n");
+            });
+        }
+    }
+
+    private void logEndGame() {
+        synchronized (mutex) {
+            // Run on the JavaFX application thread to update the UI
+            Platform.runLater(() -> {
+                logger.appendText("FINAL SCORE: " + arena.getScore());
             });
         }
     }
