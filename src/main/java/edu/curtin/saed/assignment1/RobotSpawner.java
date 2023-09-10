@@ -133,8 +133,8 @@ public class RobotSpawner {
 
                         if (arena.isCoordinateOccupiedByWall(newX, newY)) {
                             robot.setPosition(newX, newY);
-                            handleCollisions(robot);
                             arena.clearCoordinate((int) currentX, (int) currentY);
+                            handleCollisions(robot);
                         }
 
                         else {
@@ -146,13 +146,15 @@ public class RobotSpawner {
                         }
                     }
                 }
-            } catch (InterruptedException e) {}
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
         };
 
         threadPool.submit(moveRobotTask);
     }
 
-    private void handleCollisions(Robot robot) {
+    private void handleCollisions(Robot robot) throws InterruptedException {
         int robotX = (int) robot.getXPos();
         int robotY = (int) robot.getYPos();
 
@@ -163,16 +165,13 @@ public class RobotSpawner {
         // Check if the wall is already impacted (first impact)
         if (wall.getStatus().equals("built")) {
             wall.damageWall();
-            robot.dead();
-            arena.removeRobot(robot);
         }
         else {
             arena.removeWall(wall);
             wall.destroyWall();
-            robot.dead();
-            arena.removeRobot(robot);
         }
-
+        robot.dead();
+        arena.removeRobot(robot);
     }
 
     private boolean isValidMove(int newX, int newY) {
