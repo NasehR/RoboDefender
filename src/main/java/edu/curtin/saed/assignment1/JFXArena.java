@@ -246,27 +246,6 @@ public class JFXArena extends Pane
         gfx.setStroke(Color.BLUE);
         gfx.strokeText(label, (gridX + 0.5) * gridSquareSize, (gridY + 1.0) * gridSquareSize);
     }
-    
-    /** 
-     * Draws a (slightly clipped) line between two grid coordinates.
-     *     
-     * You shouldn't need to modify this method.
-     */
-    private void drawLine(GraphicsContext gfx, double gridX1, double gridY1, double gridX2, double gridY2) {
-        gfx.setStroke(Color.RED);
-        
-        // Recalculate the starting coordinate to be one unit closer to the destination, so that it
-        // doesn't overlap with any image appearing in the starting grid cell.
-        final double radius = 0.5;
-        double angle = Math.atan2(gridY2 - gridY1, gridX2 - gridX1);
-        double clippedGridX1 = gridX1 + Math.cos(angle) * radius;
-        double clippedGridY1 = gridY1 + Math.sin(angle) * radius;
-        
-        gfx.strokeLine((clippedGridX1 + 0.5) * gridSquareSize, 
-                       (clippedGridY1 + 0.5) * gridSquareSize, 
-                       (gridX2 + 0.5) * gridSquareSize, 
-                       (gridY2 + 0.5) * gridSquareSize);
-    }
 
     public void addRobot(Robot robot) throws InterruptedException {
         robots.put(robot);
