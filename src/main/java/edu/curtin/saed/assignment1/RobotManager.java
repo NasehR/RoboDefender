@@ -5,13 +5,9 @@ import java.util.concurrent.*;
 public class RobotManager implements Runnable {
     private JFXArena arena;
     private ExecutorService threadPool;
-    private BlockingQueue<RobotSpawner> robots;
-    private Object mutex;
 
     public RobotManager (JFXArena arena, ExecutorService threadPool) {
-        mutex = new Object();
         this.arena = arena;
-        robots = new ArrayBlockingQueue<>(10);
         this.threadPool = threadPool;
     }
 
