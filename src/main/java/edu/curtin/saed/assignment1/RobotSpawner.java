@@ -103,7 +103,7 @@ public class RobotSpawner {
                 int targetX = 4; // Target X coordinate (citadel's X coordinate)
                 int targetY = 4; // Target Y coordinate (citadel's Y coordinate)
 
-                while (robot.getXPos() != targetX || robot.getYPos() != targetY) {
+                while (arena.continueGame()) {
                     Thread.sleep(robot.getDelay());
 
                     // Calculate the difference between the current position and the target
@@ -179,11 +179,7 @@ public class RobotSpawner {
 
         GameObject coordinateObject = arena.coordinateOccupiedBy(robotX, robotY);
 
-        System.out.println("coordinateObject instanceof Wall: " + (coordinateObject instanceof Wall));
-        System.out.println("coordinateObject instanceof Citadel: " + (coordinateObject instanceof Citadel));
-
         if (coordinateObject instanceof Wall) {
-            System.out.println(wall.getStatus());
             // Check if the wall is already impacted (first impact)
             if (wall.getStatus().equals("built")) {
                 wall.damageWall();
@@ -198,11 +194,7 @@ public class RobotSpawner {
             arena.removeRobot(robot);
         }
         else if (coordinateObject instanceof Citadel) {
-
-            System.out.println("GAME OVER.");
-            robot.dead();
-            arena.removeRobot(robot);
-            arena.removeCitadel();
+            arena.finishGame(robot);
         }
 
     }

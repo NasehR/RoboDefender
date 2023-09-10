@@ -27,6 +27,7 @@ public class JFXArena extends Pane
     private List<Wall> walls;
     private Coordinate[][] grid;
     private Citadel citadel;
+    private boolean continueGame;
 
     /**
      * Creates a new arena object, loading the robot image and initialising a drawing surface.
@@ -42,6 +43,7 @@ public class JFXArena extends Pane
         // project is supposed to read its own internal resources, and should work both for 
         // './gradlew run' and './gradlew build'.)
 
+        continueGame = true;
         robots = new LinkedBlockingQueue<>();
         walls = new ArrayList<>();
         grid = new Coordinate[gridWidth][gridHeight];
@@ -184,6 +186,7 @@ public class JFXArena extends Pane
         Image robotImage = robot.getImage();
         String robotName = robot.getName();
         drawImage(gfx, robotImage, robotX, robotY, robot);
+        drawLabel(gfx, robotName, robotX, robotY);
     }
 
     public void addWall(Wall wall) {
@@ -290,11 +293,8 @@ public class JFXArena extends Pane
     }
 
     public void removeRobot(Robot robot) throws InterruptedException {
-        // Issue is cant use .remove() on LinkedBlockingQueue
-        System.out.println("robot" + robot.getName() + "is present before collision: " + robots.contains(robot));
         robots.remove(robot);
         layoutChildren(); // Redraw the arena to remove the robot
-        System.out.println("robot" + robot.getName() + "is present after collision: " + robots.contains(robot));
         throw new InterruptedException();
     }
 
@@ -357,5 +357,16 @@ public class JFXArena extends Pane
         int citadelX = (int) citadel.getXPos();
         int citadelY = (int) citadel.getYPos();
         grid[citadelX][citadelY].clear();
+    }
+
+    public boolean continueGame() {
+        return continueGame;
+    }
+
+    public void finishGame(Robot robot) throws InterruptedException {
+        robot.dead();
+        removeCitadel();
+        removeRobot(robot);
+        this.continueGame = false;
     }
 }
