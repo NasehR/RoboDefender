@@ -39,7 +39,7 @@ public class App extends Application
         arena.setOnSquareClicked((x, y) -> {
             try {
                 // Create a wall at the clicked square and add it to the WallBuilder
-                Wall wall = new Wall(arena, x, y); // You need to provide the appropriate constructor
+                Wall wall = new Wall(x, y); // You need to provide the appropriate constructor
                 builder.addWallToQueue(wall);
                 logger.appendText("Add wall to the queue. \n");
             }

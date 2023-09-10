@@ -8,9 +8,8 @@ public class Wall extends GameObject{
     @SuppressWarnings("PMD.FieldNamingConventions")
     private final String IMAGE_FILE = "181478.png";
     public WallState wallState;
-    private JFXArena arena;
 
-    public Wall(JFXArena arena, double xPos, double yPos) {
+    public Wall(double xPos, double yPos) {
         try(InputStream is = getClass().getClassLoader().getResourceAsStream(IMAGE_FILE))
         {
             if(is == null)
@@ -47,9 +46,5 @@ public class Wall extends GameObject{
 
     public void destroyWall() {
         wallState.destroy();
-    }
-
-    public JFXArena getArena() {
-        return this.arena;
     }
 }
