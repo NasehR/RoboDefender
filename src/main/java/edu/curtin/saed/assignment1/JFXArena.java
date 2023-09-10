@@ -11,6 +11,7 @@ import javafx.scene.text.TextAlignment;
 import java.util.*;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
 
 /**
  * A JavaFX GUI element that displays a grid on which you can draw images, text and lines.
@@ -34,8 +35,7 @@ public class JFXArena extends Pane
     /**
      * Creates a new arena object, loading the robot image and initialising a drawing surface.
      */
-    public JFXArena()
-    {
+    public JFXArena() {
         // Here's how (in JavaFX) you get an Image object from an image file that's part of the 
         // project's "resources". If you need multiple different images, you can modify this code 
         // accordingly.
@@ -46,7 +46,7 @@ public class JFXArena extends Pane
         // project is supposed to read its own internal resources, and should work both for 
         // './gradlew run' and './gradlew build'.)
 
-        robots = new ArrayBlockingQueue<>(10);
+        robots = new LinkedBlockingQueue<>();
         walls = new ArrayList<>();
         grid = new Coordinate[gridWidth][gridHeight];
         canvas = new Canvas();
@@ -58,18 +58,6 @@ public class JFXArena extends Pane
                 grid[(int) i][(int) j] = new Coordinate(i,j);
             }
         }
-    }
-
-    /**
-     * Moves a robot image to a new grid position. This is highly rudimentary, as you will need
-     * many different robots in practice. This method currently just serves as a demonstration.
-     */
-    public void setRobotPosition(double x, double y)
-    {
-        // Have a movement class that animates the movement of the robot.
-//        robotX = x;
-//        robotY = y;
-        requestLayout();
     }
     
     /**
@@ -111,8 +99,7 @@ public class JFXArena extends Pane
      * the other 'draw...()' methods. You shouldn't need to modify anything else about it.
      */
     @Override
-    public void layoutChildren()
-    {
+    public void layoutChildren() {
         super.layoutChildren(); 
         GraphicsContext gfx = canvas.getGraphicsContext2D();
         gfx.clearRect(0.0, 0.0, canvas.getWidth(), canvas.getHeight());
@@ -149,8 +136,6 @@ public class JFXArena extends Pane
 
         for (Robot robot : robots) {
             drawRobot(gfx, robot);
-//            System.out.println(robot.getXPos());
-//            System.out.println(robot.getYPos());
         }
 
         for (Wall wall: walls) {
@@ -160,17 +145,13 @@ public class JFXArena extends Pane
         }
     }
 
-    private void drawRobot(GraphicsContext gfx, Robot robot)
-    {
-        double robotx = robot.getXPos();
-        double roboty = robot.getYPos();
-//        System.out.println("X: " + robotx);
-//        System.out.println("Y: " + roboty);
-//        System.out.println("Delay:" + robot.getDelay());
+    private void drawRobot(GraphicsContext gfx, Robot robot) {
+        double robotX = robot.getXPos();
+        double robotY = robot.getYPos();
         Image robotImage = robot.getImage();
         String robotName = robot.getName();
-        drawImage(gfx, robotImage, robotx, roboty, robot);
-        drawLabel(gfx, robotName, robotx, roboty);
+        drawImage(gfx, robotImage, robotX, robotY, robot);
+        drawLabel(gfx, robotName, robotX, robotY);
     }
 
     public void addWall(Wall wall) {
@@ -222,8 +203,7 @@ public class JFXArena extends Pane
      *     
      * You shouldn't need to modify this method.
      */
-    private void drawImage(GraphicsContext gfx, Image image, double gridX, double gridY, Robot robot)
-    {
+    private void drawImage(GraphicsContext gfx, Image image, double gridX, double gridY, Robot robot) {
         // Get the pixel coordinates representing the centre of where the image is to be drawn. 
         double x = (gridX + 0.5) * gridSquareSize;
         double y = (gridY + 0.5) * gridSquareSize;
@@ -265,8 +245,7 @@ public class JFXArena extends Pane
      *     
      * You shouldn't need to modify this method.
      */
-    private void drawLabel(GraphicsContext gfx, String label, double gridX, double gridY)
-    {
+    private void drawLabel(GraphicsContext gfx, String label, double gridX, double gridY) {
         gfx.setTextAlign(TextAlignment.CENTER);
         gfx.setTextBaseline(VPos.TOP);
         gfx.setStroke(Color.BLUE);
@@ -278,8 +257,7 @@ public class JFXArena extends Pane
      *     
      * You shouldn't need to modify this method.
      */
-    private void drawLine(GraphicsContext gfx, double gridX1, double gridY1, double gridX2, double gridY2)
-    {
+    private void drawLine(GraphicsContext gfx, double gridX1, double gridY1, double gridX2, double gridY2) {
         gfx.setStroke(Color.RED);
         
         // Recalculate the starting coordinate to be one unit closer to the destination, so that it
@@ -300,11 +278,13 @@ public class JFXArena extends Pane
         layoutChildren(); // Redraw the arena to show the new robot
     }
 
-    public void removeRobot(Robot robot) {
-        if (robots.contains(robot)) {
-            robots.remove(robot);
-        }
+    public void removeRobot(Robot robot) throws InterruptedException {
+        // Issue is cant use .remove() on LinkedBlockingQueue
+        System.out.println("robot" + robot.getName() + "is present before collision: " + robots.contains(robot));
+        robots.remove(robot);
         layoutChildren(); // Redraw the arena to remove the robot
+        System.out.println("robot" + robot.getName() + "is present after collision: " + robots.contains(robot));
+        throw new InterruptedException();
     }
 
     public boolean isCoordinateOccupied(int x, int y) {
@@ -325,7 +305,7 @@ public class JFXArena extends Pane
         this.grid[x][y].clear();
     }
 
-    public double getGridSquareSize(){
+    public double getGridSquareSize() {
         return this.gridSquareSize;
     }
 
