@@ -11,8 +11,6 @@ import java.util.concurrent.Executors;
 
 public class App extends Application
 {
-    private volatile boolean stopScoreUpdateThread = false;
-
     public static void main(String[] args)
     {
         launch();
@@ -26,13 +24,12 @@ public class App extends Application
         JFXArena arena = new JFXArena();
         TextArea logger = new TextArea();
         ToolBar toolbar = new ToolBar();
-        Button btn1 = new Button("My Button 1");
-        Button btn2 = new Button("My Button 2");
         Citadel citadel = new Citadel();
         ScoreManager scoreManager = new ScoreManager();
         RobotManager manager = new RobotManager(arena, threadPool, logger);
         WallBuilder builder = new WallBuilder(arena, threadPool, logger);
         Label label = new Label("Score: " + scoreManager.getScore());
+        ScoreUpdateRunnable scoreUpdateRunnable = new ScoreUpdateRunnable(scoreManager, label);
 
         arena.setOnSquareClicked((x, y) -> {
             try {
@@ -43,24 +40,6 @@ public class App extends Application
             catch (InterruptedException e) {
             }
         });
-
-        Thread scoreUpdateThread = new Thread(() -> {
-            while (!stopScoreUpdateThread) {
-                try {
-                    // Sleep for 1000 milliseconds (1 second)
-                    Thread.sleep(1000);
-                    scoreManager.incrementScore(10);
-                    // Update the score label concurrently
-                    Platform.runLater(() -> label.setText("Score: " + scoreManager.getScore()));
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-
-        // Start the score update thread
-        scoreUpdateThread.setDaemon(true); // Set it as a daemon thread so it doesn't block the application shutdown
-        scoreUpdateThread.start();
 
 
         logger.appendText("Welcome to RoboDefender\n");
@@ -79,9 +58,9 @@ public class App extends Application
 
         manager.run();
         builder.run();
+        threadPool.submit(scoreUpdateRunnable);
 
         stage.setOnCloseRequest(event -> {
-            stopScoreUpdateThread = true;
             threadPool.shutdownNow();
             Platform.exit();
         });
