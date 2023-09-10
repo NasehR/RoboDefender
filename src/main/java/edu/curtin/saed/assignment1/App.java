@@ -50,8 +50,6 @@ public class App extends Application
         arena.setMinWidth(300.0);
         arena.addCitadel(citadel);
         arena.addScoreManager(scoreManager);
-        arena.addLogger(logger);
-        arena.addStage(stage);
         BorderPane contentPane = new BorderPane();
         contentPane.setTop(toolbar);
         contentPane.setCenter(splitPane);

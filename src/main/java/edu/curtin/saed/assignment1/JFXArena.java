@@ -1,15 +1,11 @@
 package edu.curtin.saed.assignment1;
 
-import javafx.application.Platform;
 import javafx.scene.canvas.*;
 import javafx.geometry.VPos;
-import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.TextAlignment;
-import javafx.stage.Stage;
-
 import java.util.*;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -33,8 +29,6 @@ public class JFXArena extends Pane
     private Citadel citadel;
     private boolean continueGame;
     private ScoreManager scoreManager;
-    private TextArea logger;
-    private Stage stage;
 
     /**
      * Creates a new arena object, loading the robot image and initialising a drawing surface.
@@ -388,13 +382,5 @@ public class JFXArena extends Pane
 
     public int getScore() {
         return scoreManager.getScore();
-    }
-
-    public void addLogger(TextArea logger) {
-        this.logger = logger;
-    }
-
-    public void addStage(Stage stage) {
-        this.stage = stage;
     }
 }

@@ -2,7 +2,6 @@ package edu.curtin.saed.assignment1;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Objects;
 import java.util.Random;
 import javafx.application.Platform;
 import javafx.scene.image.Image;

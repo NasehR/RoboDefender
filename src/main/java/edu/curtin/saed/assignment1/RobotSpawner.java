@@ -219,7 +219,7 @@ public class RobotSpawner {
     }
 
     private void logEndGame() {
-        synchronized (mutex) {
+        synchronized (mutex2) {
             // Run on the JavaFX application thread to update the UI
             Platform.runLater(() -> {
                 logger.appendText("FINAL SCORE: " + arena.getScore());
