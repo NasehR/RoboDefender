@@ -1,28 +1,27 @@
 package edu.curtin.saed.assignment1;
 
-import java.util.concurrent.ExecutorService;
+
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 public class ScoreManager {
     private int score;
-    private ExecutorService scoreIncrementExecutor;
+    private ScheduledExecutorService scoreIncrementExecutor;;
 
-    public ScoreManager(ExecutorService threadPool) {
+    public ScoreManager() {
         this.score = 0;
-        this.scoreIncrementExecutor = threadPool;
+        this.scoreIncrementExecutor = Executors.newScheduledThreadPool(1);
     }
 
     public void startScoreIncrementTask() {
         // Schedule a task to increment the score by 10 points every second
-        scoreIncrementExecutor.execute(() -> {
-            try {
-                incrementScore(10);
-                Thread.sleep(1000);
-            }
-            catch (InterruptedException e) {}
-        });
+        scoreIncrementExecutor.scheduleAtFixedRate(() -> incrementScore(10), 1, 1, TimeUnit.SECONDS);
+    }
+
+    public void stopScoreIncrementTask() {
+        // Shutdown the executor when the game ends
+        scoreIncrementExecutor.shutdownNow();
     }
 
     public void incrementScore(int points) {

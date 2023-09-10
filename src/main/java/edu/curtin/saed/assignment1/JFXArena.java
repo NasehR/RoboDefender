@@ -28,6 +28,7 @@ public class JFXArena extends Pane
     private Coordinate[][] grid;
     private Citadel citadel;
     private boolean continueGame;
+    private ScoreManager scoreManager;
 
     /**
      * Creates a new arena object, loading the robot image and initialising a drawing surface.
@@ -296,6 +297,7 @@ public class JFXArena extends Pane
 
     public void removeRobot(Robot robot) throws InterruptedException {
         robots.remove(robot);
+        scoreManager.incrementScoreOnRobotDestroyed();
         layoutChildren(); // Redraw the arena to remove the robot
         throw new InterruptedException();
     }
@@ -371,5 +373,14 @@ public class JFXArena extends Pane
         robot.dead();
         removeCitadel();
         removeRobot(robot);
+    }
+
+    public void addScoreManager(ScoreManager scoreManager) {
+        this.scoreManager = scoreManager;
+    }
+
+    public void startGame() {
+        // Start the score incrementation task when the game starts
+        scoreManager.startScoreIncrementTask();
     }
 }

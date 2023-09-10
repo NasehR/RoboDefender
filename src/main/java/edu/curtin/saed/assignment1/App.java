@@ -6,12 +6,13 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
-
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class App extends Application
 {
+    private volatile boolean stopScoreUpdateThread = false;
+
     public static void main(String[] args)
     {
         launch();
@@ -27,13 +28,11 @@ public class App extends Application
         ToolBar toolbar = new ToolBar();
         Button btn1 = new Button("My Button 1");
         Button btn2 = new Button("My Button 2");
-        Label label = new Label("Score: 999");
         Citadel citadel = new Citadel();
-
-        arena.addCitadel(citadel);
-
+        ScoreManager scoreManager = new ScoreManager();
         RobotManager manager = new RobotManager(arena, threadPool, logger);
         WallBuilder builder = new WallBuilder(arena, threadPool, logger);
+        Label label = new Label("Score: " + scoreManager.getScore());
 
         arena.setOnSquareClicked((x, y) -> {
             try {
@@ -45,30 +44,35 @@ public class App extends Application
             }
         });
 
-        toolbar.getItems().addAll(btn1, btn2, label);
-
-        btn1.setOnAction((event) ->
-        {
-            System.out.println("Button 1 pressed");
-            logger.appendText("Button 1 pressed\n");
+        Thread scoreUpdateThread = new Thread(() -> {
+            while (!stopScoreUpdateThread) {
+                try {
+                    // Sleep for 1000 milliseconds (1 second)
+                    Thread.sleep(1000);
+                    scoreManager.incrementScore(10);
+                    // Update the score label concurrently
+                    Platform.runLater(() -> label.setText("Score: " + scoreManager.getScore()));
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
         });
 
-        btn2.setOnAction((event) ->
-        {
-            System.out.println("Button 2 pressed");
-            logger.appendText("Button 2 pressed\n");
-        });
+        // Start the score update thread
+        scoreUpdateThread.setDaemon(true); // Set it as a daemon thread so it doesn't block the application shutdown
+        scoreUpdateThread.start();
+
 
         logger.appendText("Welcome to RoboDefender\n");
-
+        toolbar.getItems().addAll(label);
         SplitPane splitPane = new SplitPane();
         splitPane.getItems().addAll(arena, logger);
         arena.setMinWidth(300.0);
-
+        arena.addCitadel(citadel);
+        arena.addScoreManager(scoreManager);
         BorderPane contentPane = new BorderPane();
         contentPane.setTop(toolbar);
         contentPane.setCenter(splitPane);
-
         Scene scene = new Scene(contentPane, 800, 800);
         stage.setScene(scene);
         stage.show();
@@ -77,6 +81,7 @@ public class App extends Application
         builder.run();
 
         stage.setOnCloseRequest(event -> {
+            stopScoreUpdateThread = true;
             threadPool.shutdownNow();
             Platform.exit();
         });
