@@ -46,10 +46,11 @@ public class RobotSpawner {
                     if(!arena.isCoordinateOccupied(0, 0)) {
                         xPos = 0.0;
                         yPos = 0.0;
-                        Robot newRobot = new Robot(Integer.toString(++robotCount));
+                        Robot newRobot = new Robot(Integer.toString(++robotCount), logger);
                         newRobot.setPosition(xPos, yPos);
                         arena.addRobot(newRobot);
                         arena.coordinateOccupied(newRobot);
+                        newRobot.logCreation();
                         moveRobot(newRobot);
                     }
                     break;
@@ -57,10 +58,11 @@ public class RobotSpawner {
                     if(!arena.isCoordinateOccupied(8, 0)) {
                         xPos = 8.0;
                         yPos = 0.0;
-                        Robot newRobot = new Robot(Integer.toString(++robotCount));
+                        Robot newRobot = new Robot(Integer.toString(++robotCount), logger);
                         newRobot.setPosition(xPos, yPos);
                         arena.addRobot(newRobot);
                         arena.coordinateOccupied(newRobot);
+                        newRobot.logCreation();
                         moveRobot(newRobot);
                     }
                     break;
@@ -68,10 +70,11 @@ public class RobotSpawner {
                     if(!arena.isCoordinateOccupied(0, 8)) {
                         xPos = 0.0;
                         yPos = 8.0;
-                        Robot newRobot = new Robot(Integer.toString(++robotCount));
+                        Robot newRobot = new Robot(Integer.toString(++robotCount), logger);
                         newRobot.setPosition(xPos, yPos);
                         arena.addRobot(newRobot);
                         arena.coordinateOccupied(newRobot);
+                        newRobot.logCreation();
                         moveRobot(newRobot);
                     }
                     break;
@@ -79,10 +82,11 @@ public class RobotSpawner {
                     if(!arena.isCoordinateOccupied(8, 8)) {
                         xPos = 8.0;
                         yPos = 8.0;
-                        Robot newRobot = new Robot(Integer.toString(++robotCount));
+                        Robot newRobot = new Robot(Integer.toString(++robotCount), logger);
                         newRobot.setPosition(xPos, yPos);
                         arena.addRobot(newRobot);
                         arena.coordinateOccupied(newRobot);
+                        newRobot.logCreation();
                         moveRobot(newRobot);
                     }
                     break;

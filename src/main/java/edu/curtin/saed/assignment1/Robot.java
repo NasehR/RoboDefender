@@ -2,8 +2,12 @@ package edu.curtin.saed.assignment1;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Objects;
 import java.util.Random;
+import javafx.application.Platform;
 import javafx.scene.image.Image;
+import javafx.scene.control.TextArea;
+
 
 public class Robot extends GameObject {
     @SuppressWarnings("PMD.FieldNamingConventions")
@@ -11,8 +15,10 @@ public class Robot extends GameObject {
     private String id;
     private int d;
     public RobotState robotState;
+    private TextArea logger;
+    private Object mutex;
 
-    public Robot (String id)
+    public Robot (String id, TextArea logger)
     {
         try(InputStream is = getClass().getClassLoader().getResourceAsStream(IMAGE_FILE))
         {
@@ -29,6 +35,8 @@ public class Robot extends GameObject {
         this.id = id;
         this.d = delay();
         robotState = new Alive(this);
+        mutex = new Object();
+        this.logger = logger;
     }
 
     public void setPosition(double xPos, double yPos)
@@ -37,13 +45,19 @@ public class Robot extends GameObject {
         this.yPos = yPos;
     }
 
-    public void setXPosition(double xPos)
-    {
-        this.xPos = xPos;
-    }
+    public void logCreation() {
+        int robotX = (int) getXPos() + 1;
+        int robotY = (int) getYPos() + 1;
+        System.out.println("robotX: " + getXPos());
+        System.out.println("robotY: " + getYPos());
+        String logMessage = "Robot " + id + " created at (" + robotX + ", " + robotY + ")";
 
-    public void setYPosition(double yPos) {
-        this.yPos = yPos;
+        synchronized (mutex) {
+            // Run on the JavaFX application thread to update the UI
+            Platform.runLater(() -> {
+                logger.appendText(logMessage + "\n");
+            });
+        }
     }
 
     public void setState(RobotState newState)
