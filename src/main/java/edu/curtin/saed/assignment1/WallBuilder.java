@@ -4,6 +4,7 @@ import javafx.application.Platform;
 
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.ExecutorService;
 
 public class WallBuilder {
     @SuppressWarnings("PMD.FieldNamingConventions")
@@ -12,13 +13,15 @@ public class WallBuilder {
     private final long BUILD_DELAY = 2000; // 2000 milliseconds
     private final JFXArena arena;
     private final BlockingQueue<Wall> buildQueue;
-    private Thread addingWallThread = null;
+//    private Thread addingWallThread = null;
     private final Object mutex;
+    private ExecutorService threadPool;
 
-    public WallBuilder(JFXArena arena) {
+    public WallBuilder(JFXArena arena, ExecutorService threadPool) {
         this.arena = arena;
         buildQueue = new ArrayBlockingQueue<>(MAX_WALLS);
         mutex = new Object();
+        this.threadPool = threadPool;
     }
 
     public void run () {
@@ -42,15 +45,14 @@ public class WallBuilder {
             }
         };
 
-        addingWallThread = new Thread(addWallTask, "Adding Wall");
-        addingWallThread.start();
+        threadPool.submit(addWallTask);
     }
 
-    public void stop() {
-        if (addingWallThread != null) {
-            addingWallThread.interrupt();
-        }
-    }
+//    public void stop() {
+//        if (addingWallThread != null) {
+//            addingWallThread.interrupt();
+//        }
+//    }
 
     public void addWallToQueue(Wall wall) throws InterruptedException {
         if (buildQueue.size() < MAX_WALLS) {

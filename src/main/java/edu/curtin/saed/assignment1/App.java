@@ -29,7 +29,7 @@ public class App extends Application
         Button btn2 = new Button("My Button 2");
         Label label = new Label("Score: 999");
         RobotManager manager = new RobotManager(arena, threadPool);
-        WallBuilder builder = new WallBuilder(arena);
+        WallBuilder builder = new WallBuilder(arena, threadPool);
 
         arena.addListener((x, y) ->
 //                System.out.println("Arena click at (" + x + "," + y + ")")
@@ -81,7 +81,7 @@ public class App extends Application
         stage.setOnCloseRequest(event -> {
 //            manager.shutdown();
             threadPool.shutdownNow();
-            builder.stop();
+//            builder.stop();
             Platform.exit();
         });
     }
