@@ -28,7 +28,7 @@ public class App extends Application
         Button btn1 = new Button("My Button 1");
         Button btn2 = new Button("My Button 2");
         Label label = new Label("Score: 999");
-        RobotManager manager = new RobotManager(arena, threadPool);
+        RobotManager manager = new RobotManager(arena, threadPool, logger);
         WallBuilder builder = new WallBuilder(arena, threadPool, logger);
 
         arena.setOnSquareClicked((x, y) -> {

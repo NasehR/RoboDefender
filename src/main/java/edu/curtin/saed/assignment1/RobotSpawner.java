@@ -1,6 +1,7 @@
 package edu.curtin.saed.assignment1;
 
 import javafx.application.Platform;
+import javafx.scene.control.TextArea;
 
 import java.util.Random;
 import java.util.concurrent.ExecutorService;
@@ -20,12 +21,16 @@ public class RobotSpawner {
     private int robotCount;
     private ExecutorService threadPool;
     private final Object lock;
+    private final Object mutex;
+    private TextArea logger;
 
-    public RobotSpawner(JFXArena arena, ExecutorService threadPool) {
+    public RobotSpawner(JFXArena arena, ExecutorService threadPool, TextArea logger) {
         this.arena = arena;
         robotCount = 0;
         this.threadPool = threadPool;
         lock = new Object();
+        mutex = new Object();
+        this.logger = logger;
     }
 
     public void spawnRobots() throws InterruptedException {
@@ -168,13 +173,34 @@ public class RobotSpawner {
         // Check if the wall is already impacted (first impact)
         if (wall.getStatus().equals("built")) {
             wall.damageWall();
+            logCollision(robot, wall);
         }
         else {
             arena.removeWall(wall);
             wall.destroyWall();
+            logCollision(robot, wall);
+
         }
         robot.dead();
         arena.removeRobot(robot);
+    }
+
+    private void logCollision(Robot robot, Wall wall) {
+        int robotX = (int) robot.getXPos() + 1;
+        int robotY = (int) robot.getYPos() + 1;
+        int wallX = (int) wall.getXPos() + 1;
+        int wallY = (int) wall.getYPos() + 1;
+
+        String logWallMessage = "Wall at (" + wallX + ", " + wallY + ") is " + wall.getStatus().toString();
+        String logRobotMessage = "Robot " + robot.getName() + " died at (" + robotX + ", " + robotY + ")";
+
+        synchronized (mutex) {
+            // Run on the JavaFX application thread to update the UI
+            Platform.runLater(() -> {
+                logger.appendText(logWallMessage + "\n");
+                logger.appendText(logRobotMessage + "\n");
+            });
+        }
     }
 
     private boolean isValidMove(int newX, int newY) {
