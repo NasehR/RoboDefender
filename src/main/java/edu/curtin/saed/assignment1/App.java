@@ -45,7 +45,7 @@ public class App extends Application
 //        wallLabel = new Label("\t\t\tWalls in the queue: 0");
 //        scoreUpdateRunnable = new ScoreUpdateRunnable(scoreManager, scoreLabel);
         toolbar = new ToolBar();
-        restartButton = new Button("Restart Game");
+        restartButton = new Button("Start Game");
         running = true;
 
         arena.setOnSquareClicked((x, y) -> {
@@ -63,6 +63,7 @@ public class App extends Application
         restartButton.setOnAction(event -> {
 //            running = true;
             if (running) {
+                restartButton.setText("Stop Game");
                 initialize();
                 stage.show();
                 logger.clear();
@@ -83,6 +84,7 @@ public class App extends Application
                 scoreUpdateRunnable.stopThread();
                 threadPool.shutdownNow();
                 running = true;
+                restartButton.setText("Restart Game");
             }
         });
 
