@@ -44,7 +44,7 @@ public class App extends Application
             }
         });
 
-        logger.appendText("Welcome to RoboDefender\n");
+        logger.appendText("Welcome to RoboDefender\n\n");
         toolbar.getItems().addAll(scoreLabel, wallLabel);
         SplitPane splitPane = new SplitPane();
         splitPane.getItems().addAll(arena, logger);
