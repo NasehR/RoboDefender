@@ -11,6 +11,19 @@ import java.util.concurrent.Executors;
 
 public class App extends Application
 {
+
+    private ExecutorService threadPool;
+    private JFXArena arena;
+    private TextArea logger;
+    private Citadel citadel;
+    private ScoreManager scoreManager;
+    private RobotManager manager;
+    private WallBuilder builder;
+    private Label scoreLabel;
+    private Label wallLabel;
+    private ScoreUpdateRunnable scoreUpdateRunnable;
+    private ToolBar toolbar;
+    private Button restartButton;
     public static void main(String[] args)
     {
         launch();
@@ -20,17 +33,18 @@ public class App extends Application
     public void start(Stage stage)
     {
         stage.setTitle("RoboDefender");
-        ExecutorService threadPool = Executors.newFixedThreadPool(15);
-        JFXArena arena = new JFXArena();
-        TextArea logger = new TextArea();
-        Citadel citadel = new Citadel();
-        ScoreManager scoreManager = new ScoreManager();
-        RobotManager manager = new RobotManager(arena, threadPool, logger);
-        WallBuilder builder = new WallBuilder(arena, threadPool, logger);
-        Label scoreLabel = new Label("Score: " + scoreManager.getScore());
-        Label wallLabel = new Label("\t\t\tWalls in the queue: " + arena.numberOfWalls());
-        ScoreUpdateRunnable scoreUpdateRunnable = new ScoreUpdateRunnable(scoreManager, scoreLabel);
-        ToolBar toolbar = new ToolBar();
+        threadPool = Executors.newFixedThreadPool(15);
+        arena = new JFXArena();
+        logger = new TextArea();
+        citadel = new Citadel();
+        scoreManager = new ScoreManager();
+        manager = new RobotManager(arena, threadPool, logger);
+        builder = new WallBuilder(arena, threadPool, logger);
+        scoreLabel = new Label("Score: " + scoreManager.getScore());
+        wallLabel = new Label("\t\t\tWalls in the queue: " + arena.numberOfWalls());
+        scoreUpdateRunnable = new ScoreUpdateRunnable(scoreManager, scoreLabel);
+        toolbar = new ToolBar();
+        restartButton = new Button("Restart Game");
 
         arena.setOnSquareClicked((x, y) -> {
             try {
