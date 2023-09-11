@@ -20,7 +20,7 @@ public class ScoreUpdateRunnable implements Runnable {
             try {
                 Thread.sleep(1000); // Sleep for 1 second
                 scoreManager.incrementScore(10); // Increase the score by 10
-                Platform.runLater(() -> label.setText("Score: " + scoreManager.getScore()));
+                Platform.runLater(() -> label.setText("\t\t\tScore: " + scoreManager.getScore()));
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt(); // Restore the interrupted status
             }

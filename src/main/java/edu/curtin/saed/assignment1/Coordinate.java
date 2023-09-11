@@ -36,6 +36,7 @@ public class Coordinate {
 
     public void clear() {
         this.occupied = false;
+        coordinateObject = null;
     }
 
     public GameObject getCoordinateObject() {

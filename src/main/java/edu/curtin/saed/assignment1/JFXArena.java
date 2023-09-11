@@ -1,5 +1,6 @@
 package edu.curtin.saed.assignment1;
 
+import javafx.application.Platform;
 import javafx.scene.canvas.*;
 import javafx.geometry.VPos;
 import javafx.scene.image.Image;
@@ -30,6 +31,7 @@ public class JFXArena extends Pane
     private boolean continueGame;
     private ScoreManager scoreManager;
     private ScoreUpdateRunnable scoreUpdateRunnable;
+    private Object mutex;
 
     /**
      * Creates a new arena object, loading the robot image and initialising a drawing surface.
@@ -46,6 +48,7 @@ public class JFXArena extends Pane
         // './gradlew run' and './gradlew build'.)
 
         continueGame = true;
+        mutex = new Object();
         robots = new LinkedBlockingQueue<>();
         walls = new ArrayList<>();
         grid = new Coordinate[gridWidth][gridHeight];
@@ -394,5 +397,33 @@ public class JFXArena extends Pane
 
     public void addScoreUpdater(ScoreUpdateRunnable scoreUpdateRunnable) {
         this.scoreUpdateRunnable = scoreUpdateRunnable;
+    }
+
+    public void clearArena() {
+        // Clear all robots, walls, and other game elements
+        clearGrid();
+        // Clear any other game elements you have added
+
+        // Reset the score to zero
+        resetScore();
+    }
+
+    private void resetScore() {
+        scoreManager.resetScore();
+    }
+
+    private void clearGrid() {
+
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                if (!grid[i][j].isOccupiedByCitadel()) {
+                    grid[i][j].clear();
+                }
+            }
+        }
+
+        // CLEAR ROBOTS AND WALLS FROM THE QUEUE AND LIST
+        // clear robots
+        // clear walls
     }
 }

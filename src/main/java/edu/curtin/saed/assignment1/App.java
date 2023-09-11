@@ -24,6 +24,7 @@ public class App extends Application
     private ScoreUpdateRunnable scoreUpdateRunnable;
     private ToolBar toolbar;
     private Button restartButton;
+    private boolean running;
     public static void main(String[] args)
     {
         launch();
@@ -33,18 +34,19 @@ public class App extends Application
     public void start(Stage stage)
     {
         stage.setTitle("RoboDefender");
-        threadPool = Executors.newFixedThreadPool(15);
+//        threadPool = Executors.newFixedThreadPool(15);
         arena = new JFXArena();
         logger = new TextArea();
-        citadel = new Citadel();
-        scoreManager = new ScoreManager();
-        manager = new RobotManager(arena, threadPool, logger);
-        builder = new WallBuilder(arena, threadPool, logger);
-        scoreLabel = new Label("Score: " + scoreManager.getScore());
-        wallLabel = new Label("\t\t\tWalls in the queue: " + arena.numberOfWalls());
-        scoreUpdateRunnable = new ScoreUpdateRunnable(scoreManager, scoreLabel);
+//        citadel = new Citadel();
+//        scoreManager = new ScoreManager();
+//        manager = new RobotManager(arena, threadPool, logger);
+//        builder = new WallBuilder(arena, threadPool, logger);
+//        scoreLabel = new Label("\t\t\tScore: 0");
+//        wallLabel = new Label("\t\t\tWalls in the queue: 0");
+//        scoreUpdateRunnable = new ScoreUpdateRunnable(scoreManager, scoreLabel);
         toolbar = new ToolBar();
         restartButton = new Button("Restart Game");
+        running = true;
 
         arena.setOnSquareClicked((x, y) -> {
             try {
@@ -58,14 +60,36 @@ public class App extends Application
             }
         });
 
+        restartButton.setOnAction(event -> {
+//            running = true;
+            if (running) {
+                initialize();
+                stage.show();
+                logger.clear();
+                logger.appendText("Welcome to RoboDefender\n\n");
+                arena.setMinWidth(300.0);
+                arena.addCitadel(citadel);
+                arena.addScoreManager(scoreManager);
+                arena.addScoreUpdater(scoreUpdateRunnable);
+                toolbar.getItems().addAll(scoreLabel, wallLabel);
+
+                manager.run();
+                builder.run();
+                threadPool.submit(scoreUpdateRunnable);
+                running = false;
+            }
+            else {
+                arena.clearArena();
+                scoreUpdateRunnable.stopThread();
+                threadPool.shutdownNow();
+                running = true;
+            }
+        });
+
         logger.appendText("Welcome to RoboDefender\n\n");
-        toolbar.getItems().addAll(scoreLabel, wallLabel);
+        toolbar.getItems().addAll(restartButton);
         SplitPane splitPane = new SplitPane();
         splitPane.getItems().addAll(arena, logger);
-        arena.setMinWidth(300.0);
-        arena.addCitadel(citadel);
-        arena.addScoreManager(scoreManager);
-        arena.addScoreUpdater(scoreUpdateRunnable);
         BorderPane contentPane = new BorderPane();
         contentPane.setTop(toolbar);
         contentPane.setCenter(splitPane);
@@ -73,15 +97,22 @@ public class App extends Application
         stage.setScene(scene);
         stage.show();
 
-        manager.run();
-        builder.run();
-        threadPool.submit(scoreUpdateRunnable);
-
         stage.setOnCloseRequest(event -> {
             threadPool.shutdownNow();
             Platform.exit();
             scoreUpdateRunnable.stopThread();
             scoreManager.stopScoreIncrementTask();
         });
+    }
+
+    private void initialize() {
+        threadPool = Executors.newFixedThreadPool(15);
+        citadel = new Citadel();
+        scoreManager = new ScoreManager();
+        manager = new RobotManager(arena, threadPool, logger);
+        builder = new WallBuilder(arena, threadPool, logger);
+        scoreLabel = new Label("\t\t\tScore: " + scoreManager.getScore());
+        wallLabel = new Label("\t\t\tWalls in the queue: " + arena.numberOfWalls());
+        scoreUpdateRunnable = new ScoreUpdateRunnable(scoreManager, scoreLabel);
     }
 }
