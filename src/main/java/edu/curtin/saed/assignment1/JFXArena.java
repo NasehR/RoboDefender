@@ -372,8 +372,9 @@ public class JFXArena extends Pane
         this.continueGame = false;
         robot.dead();
         removeCitadel();
-        removeRobot(robot);
-        System.out.println("FINAL SCORE: " + getScore());
+        robots.remove(robot);
+        layoutChildren(); // Redraw the arena to remove the robot
+        throw new InterruptedException();
     }
 
     public void addScoreManager(ScoreManager scoreManager) {
