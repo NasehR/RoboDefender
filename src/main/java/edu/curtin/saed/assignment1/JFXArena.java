@@ -422,7 +422,8 @@ public class JFXArena extends Pane
             }
         }
 
-        // CLEAR ROBOTS AND WALLS FROM THE QUEUE AND LIST
+        walls.clear();
+        robots.clear();
         // clear robots
         // clear walls
     }
