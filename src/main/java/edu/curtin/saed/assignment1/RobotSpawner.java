@@ -36,13 +36,12 @@ public class RobotSpawner {
     }
 
     public void spawnRobots() throws InterruptedException {
-        for (int i = 0; i < 5; i++)
+        for (int i = 0; i < 150; i++)
         {
             Random random = new Random();
             int corner = random.nextInt(4); // Randomly choose a corner (0 to 3)
             double xPos, yPos;
 
-            System.out.println(i + ":" + corner);
             switch (corner) {
                 case TOP_LEFT: // Top-left corner
                     if(!arena.isCoordinateOccupied(0, 0)) {

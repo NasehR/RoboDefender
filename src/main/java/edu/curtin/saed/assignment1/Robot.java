@@ -47,8 +47,7 @@ public class Robot extends GameObject {
     public void logCreation() {
         int robotX = (int) getXPos() + 1;
         int robotY = (int) getYPos() + 1;
-        System.out.println("robotX: " + getXPos());
-        System.out.println("robotY: " + getYPos());
+
         String logMessage = "Robot " + id + " created at (" + robotX + ", " + robotY + ")";
 
         synchronized (mutex) {
