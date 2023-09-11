@@ -6,15 +6,17 @@ import javafx.scene.control.Label;
 public class ScoreUpdateRunnable implements Runnable {
     private ScoreManager scoreManager;
     private Label label;
+    private boolean running;
 
     public ScoreUpdateRunnable(ScoreManager scoreManager, Label label) {
         this.scoreManager = scoreManager;
         this.label = label;
+        this.running = true; // Initially, the thread is running
     }
 
     @Override
     public void run() {
-        while (!Thread.currentThread().isInterrupted()) {
+        while (running && !Thread.currentThread().isInterrupted()) {
             try {
                 Thread.sleep(1000); // Sleep for 1 second
                 scoreManager.incrementScore(10); // Increase the score by 10
@@ -23,5 +25,10 @@ public class ScoreUpdateRunnable implements Runnable {
                 Thread.currentThread().interrupt(); // Restore the interrupted status
             }
         }
+    }
+
+    // Method to stop the thread
+    public void stopThread() {
+        running = false;
     }
 }

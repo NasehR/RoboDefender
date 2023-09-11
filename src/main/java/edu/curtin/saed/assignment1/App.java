@@ -65,6 +65,7 @@ public class App extends Application
         arena.setMinWidth(300.0);
         arena.addCitadel(citadel);
         arena.addScoreManager(scoreManager);
+        arena.addScoreUpdater(scoreUpdateRunnable);
         BorderPane contentPane = new BorderPane();
         contentPane.setTop(toolbar);
         contentPane.setCenter(splitPane);
@@ -79,6 +80,8 @@ public class App extends Application
         stage.setOnCloseRequest(event -> {
             threadPool.shutdownNow();
             Platform.exit();
+            scoreUpdateRunnable.stopThread();
+            scoreManager.stopScoreIncrementTask();
         });
     }
 }

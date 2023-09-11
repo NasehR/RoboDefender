@@ -29,6 +29,7 @@ public class JFXArena extends Pane
     private Citadel citadel;
     private boolean continueGame;
     private ScoreManager scoreManager;
+    private ScoreUpdateRunnable scoreUpdateRunnable;
 
     /**
      * Creates a new arena object, loading the robot image and initialising a drawing surface.
@@ -369,6 +370,8 @@ public class JFXArena extends Pane
     }
 
     public void finishGame(Robot robot) throws InterruptedException {
+        scoreManager.stopScoreIncrementTask();
+        scoreUpdateRunnable.stopThread();
         this.continueGame = false;
         robot.dead();
         removeCitadel();
@@ -387,5 +390,9 @@ public class JFXArena extends Pane
 
     public int numberOfWalls() {
         return walls.size();
+    }
+
+    public void addScoreUpdater(ScoreUpdateRunnable scoreUpdateRunnable) {
+        this.scoreUpdateRunnable = scoreUpdateRunnable;
     }
 }
