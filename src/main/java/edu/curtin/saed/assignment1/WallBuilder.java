@@ -14,7 +14,6 @@ public class WallBuilder {
     private final long BUILD_DELAY = 2000; // 2000 milliseconds
     private final JFXArena arena;
     private final BlockingQueue<Wall> buildQueue;
-//    private Thread addingWallThread = null;
     private final Object mutex;
     private ExecutorService threadPool;
     private TextArea logger;
@@ -52,12 +51,6 @@ public class WallBuilder {
 
         threadPool.submit(addWallTask);
     }
-
-//    public void stop() {
-//        if (addingWallThread != null) {
-//            addingWallThread.interrupt();
-//        }
-//    }
 
     public void addWallToQueue(Wall wall) throws InterruptedException {
         if (buildQueue.size() < MAX_WALLS) {

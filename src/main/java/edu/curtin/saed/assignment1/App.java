@@ -23,13 +23,14 @@ public class App extends Application
         ExecutorService threadPool = Executors.newFixedThreadPool(15);
         JFXArena arena = new JFXArena();
         TextArea logger = new TextArea();
-        ToolBar toolbar = new ToolBar();
         Citadel citadel = new Citadel();
         ScoreManager scoreManager = new ScoreManager();
         RobotManager manager = new RobotManager(arena, threadPool, logger);
         WallBuilder builder = new WallBuilder(arena, threadPool, logger);
-        Label label = new Label("Score: " + scoreManager.getScore());
-        ScoreUpdateRunnable scoreUpdateRunnable = new ScoreUpdateRunnable(scoreManager, label);
+        Label scoreLabel = new Label("Score: " + scoreManager.getScore());
+        Label wallLabel = new Label("\t\t\tWalls in the queue: " + arena.numberOfWalls());
+        ScoreUpdateRunnable scoreUpdateRunnable = new ScoreUpdateRunnable(scoreManager, scoreLabel);
+        ToolBar toolbar = new ToolBar();
 
         arena.setOnSquareClicked((x, y) -> {
             try {
@@ -44,7 +45,7 @@ public class App extends Application
         });
 
         logger.appendText("Welcome to RoboDefender\n");
-        toolbar.getItems().addAll(label);
+        toolbar.getItems().addAll(scoreLabel, wallLabel);
         SplitPane splitPane = new SplitPane();
         splitPane.getItems().addAll(arena, logger);
         arena.setMinWidth(300.0);

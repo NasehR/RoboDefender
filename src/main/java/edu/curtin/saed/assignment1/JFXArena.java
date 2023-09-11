@@ -383,4 +383,8 @@ public class JFXArena extends Pane
     public int getScore() {
         return scoreManager.getScore();
     }
+
+    public int numberOfWalls() {
+        return walls.size();
+    }
 }
