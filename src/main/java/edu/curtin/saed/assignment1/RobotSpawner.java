@@ -136,12 +136,11 @@ public class RobotSpawner {
                                 double intermediateX = currentX + fraction * (newX - currentX);
                                 double intermediateY = currentY + fraction * (newY - currentY);
                                 robot.setPosition(intermediateX, intermediateY);
-
-                                // Redraw the arena to show the updated robot position
-                                Platform.runLater(() -> {
-                                    arena.layoutChildren();
-                                });
                             }
+                            // Redraw the arena to show the updated robot position
+                            Platform.runLater(() -> {
+                                arena.layoutChildren();
+                            });
                         }
 
                         if (arena.isCoordinateOccupiedByWall(newX, newY)) {
