@@ -113,10 +113,10 @@ public class App extends Application
         threadPool = Executors.newFixedThreadPool(15);
         citadel = new Citadel();
         scoreManager = new ScoreManager();
-        manager = new RobotManager(arena, threadPool, logger);
-        builder = new WallBuilder(arena, threadPool, logger);
         scoreLabel = new Label("\t\t\tScore: " + scoreManager.getScore());
         wallLabel = new Label("\t\t\tWalls in the queue: " + arena.numberOfWalls());
+        manager = new RobotManager(arena, threadPool, logger);
+        builder = new WallBuilder(arena, threadPool, logger, wallLabel);
         scoreUpdateRunnable = new ScoreUpdateRunnable(scoreManager, scoreLabel);
     }
 }
