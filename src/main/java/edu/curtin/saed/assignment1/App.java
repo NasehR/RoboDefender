@@ -80,6 +80,8 @@ public class App extends Application
                 running = false;
             }
             else {
+                toolbar.getItems().remove(scoreLabel);
+                toolbar.getItems().remove(wallLabel);
                 arena.clearArena();
                 scoreUpdateRunnable.stopThread();
                 threadPool.shutdownNow();
